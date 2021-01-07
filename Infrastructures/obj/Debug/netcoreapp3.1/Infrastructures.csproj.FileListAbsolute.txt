@@ -1,0 +1,16 @@
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Infrastructures.deps.json
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Infrastructures.dll
+C:\Users\kalan\source\repos\Diplom\Infrastructures\obj\Debug\netcoreapp3.1\Infrastructures.csprojAssemblyReference.cache
+C:\Users\kalan\source\repos\Diplom\Infrastructures\obj\Debug\netcoreapp3.1\Infrastructures.AssemblyInfoInputs.cache
+C:\Users\kalan\source\repos\Diplom\Infrastructures\obj\Debug\netcoreapp3.1\Infrastructures.AssemblyInfo.cs
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Infrastructures.pdb
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Application.dll
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Domain.dll
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Persistence.dll
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Application.pdb
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Domain.pdb
+C:\Users\kalan\source\repos\Diplom\Infrastructures\bin\Debug\netcoreapp3.1\Persistence.pdb
+C:\Users\kalan\source\repos\Diplom\Infrastructures\obj\Debug\netcoreapp3.1\Infrastructures.csproj.CopyComplete
+C:\Users\kalan\source\repos\Diplom\Infrastructures\obj\Debug\netcoreapp3.1\Infrastructures.dll
+C:\Users\kalan\source\repos\Diplom\Infrastructures\obj\Debug\netcoreapp3.1\Infrastructures.pdb
+C:\Users\kalan\source\repos\Diplom\Infrastructures\obj\Debug\netcoreapp3.1\Infrastructures.csproj.CoreCompileInputs.cache
