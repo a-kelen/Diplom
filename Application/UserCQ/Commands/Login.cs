@@ -1,6 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
-using Application.UserCQ.Data;
+using Application.DTO;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;

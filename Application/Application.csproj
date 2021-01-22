@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ComponentCQ\Commands\" />
     <Folder Include="ComponentCQ\Queries\" />
     <Folder Include="LibraryCQ\Commands\" />
     <Folder Include="LibraryCQ\Queries\" />

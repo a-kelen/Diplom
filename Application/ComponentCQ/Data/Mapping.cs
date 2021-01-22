@@ -1,10 +1,17 @@
-﻿using System;
+﻿using Application.DTO;
+using AutoMapper;
+using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Application.ComponentCQ.Data
 {
-    class Mapping
+    public class Mapping : Profile
     {
+        public Mapping()
+        {
+            CreateMap<Component, ComponentDTO>();
+        }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.UserCQ.Data
+namespace Application.DTO
 {
     public class UserDTO
     {

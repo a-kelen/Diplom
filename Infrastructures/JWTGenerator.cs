@@ -31,7 +31,7 @@ namespace Infrastructures
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.Now.AddDays(100),
                 SigningCredentials = creds
             };
 

@@ -26,6 +26,9 @@ using Application.Interfaces;
 using Infrastructures;
 using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
+using FluentValidation.AspNetCore;
+using static Application.ComponentCQ.Commands.Create;
+using MediatR.Extensions.FluentValidation.AspNetCore;
 
 namespace API
 {
@@ -40,7 +43,19 @@ namespace API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .WithExposedHeaders("WWW-Authenticate")
+                          .WithOrigins("http://localhost:8080")
+                          .AllowCredentials();
+                });
+            });
+
             services.AddControllers();
             services.TryAddSingleton<ISystemClock, SystemClock>();
             services.AddDbContext<DataContext>(opt =>
@@ -82,6 +97,7 @@ namespace API
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "Diplom API" });
+                swagger.CustomSchemaIds(x => x.FullName);
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -110,6 +126,8 @@ namespace API
 
 
             services.AddMediatR(typeof(ValidatorExtensions).Assembly);
+            services.AddFluentValidation(new[] { typeof(ValidatorExtensions).Assembly });
+
             services.AddAutoMapper(typeof(ValidatorExtensions));
 
             services.AddScoped<iJWTGenerator, JWTGenerator>();
@@ -130,7 +148,7 @@ namespace API
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseCors("CorsPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
