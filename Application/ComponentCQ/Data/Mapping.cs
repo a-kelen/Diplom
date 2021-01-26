@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -12,6 +13,11 @@ namespace Application.ComponentCQ.Data
         public Mapping()
         {
             CreateMap<Component, ComponentDTO>();
+
+            CreateMap<Commands.Create.Command, Component>();
+
+            CreateMap<PropVM, Prop>();
+            CreateMap<EventVM, Event>();
         }
     }
 }

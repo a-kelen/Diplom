@@ -16,13 +16,13 @@ namespace Application.UserCQ.Commands
 {
     public class Login
     {
-        public class Query : IRequest<UserDTO>
+        public class Command : IRequest<UserDTO>
         {
             public string Email { get; set; }
             public string Password { get; set; }
         }
 
-        public class QueryValidator : AbstractValidator<Query>
+        public class QueryValidator : AbstractValidator<Command>
         {
             public QueryValidator()
             {
@@ -31,7 +31,7 @@ namespace Application.UserCQ.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Query, UserDTO>
+        public class Handler : IRequestHandler<Command, UserDTO>
         {
             private readonly UserManager<User> _userManager;
             private readonly SignInManager<User> _signInManager;
@@ -43,7 +43,7 @@ namespace Application.UserCQ.Commands
                 _userManager = userManager;
             }
 
-            public async Task<UserDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<UserDTO> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
 

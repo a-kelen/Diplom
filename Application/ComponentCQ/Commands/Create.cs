@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
@@ -19,9 +20,8 @@ namespace Application.ComponentCQ.Commands
         public class Command : IRequest<ComponentDTO>
         {
             public string Description { get; set;}
-
-            public List<EventDTO> Events { get; set; }
-            public List<PropDTO> Props { get; set; }
+            public List<EventVM> Events { get; set; }
+            public List<PropVM> Props { get; set; }
 
         }
         public class Validator : AbstractValidator<Command>
@@ -47,10 +47,11 @@ namespace Application.ComponentCQ.Commands
 
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
             {
-
-                //db.Components.Add(request.);
-
-                return mapper.Map<Component, ComponentDTO>(new Component());
+                Component component = mapper.Map<Command, Component>(request);
+                component.UserId = userAccessor.GetId();
+                var res = await db.Components.AddAsync(component);
+                await db.SaveChangesAsync();
+                return mapper.Map<Component, ComponentDTO>(res.Entity);
             }
         }
     }

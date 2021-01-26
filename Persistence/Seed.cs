@@ -18,7 +18,7 @@ namespace Persistence
 
         private void UserSeed()
         {
-            string ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
+            string ADMIN_ID = "D2429ACD-E887-47F8-8AD2-6502E05C9068";
             var user = new User
             {
                 Id = new Guid(ADMIN_ID),
@@ -29,7 +29,7 @@ namespace Persistence
                 UserName = "admin"
             };
             PasswordHasher<User> ph = new PasswordHasher<User>();
-            user.PasswordHash = ph.HashPassword(user, "123123");
+            user.PasswordHash = ph.HashPassword(user, "_123123Aa");
             this.builder.Entity<User>().HasData(user);
         }
     }

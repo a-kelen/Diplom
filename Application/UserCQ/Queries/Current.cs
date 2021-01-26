@@ -21,13 +21,6 @@ namespace Application.UserCQ.Queries
         {
 
         }
-        public class Validator : AbstractValidator<Query>
-        {
-            public Validator()
-            {
-
-            }
-        }
         public class Handler : IRequestHandler<Query, UserDTO>
         {
             DataContext db;

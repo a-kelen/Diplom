@@ -7,7 +7,7 @@ namespace Domain.Entities
 {
     public class BaseTimeEntity : BaseEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime Created { get; set; }
     }
 }

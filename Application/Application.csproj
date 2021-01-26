@@ -22,9 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ComponentCQ\Queries\" />
-    <Folder Include="LibraryCQ\Commands\" />
-    <Folder Include="LibraryCQ\Queries\" />
     <Folder Include="ReportCQ\Commands\" />
     <Folder Include="ReportCQ\Queries\" />
   </ItemGroup>

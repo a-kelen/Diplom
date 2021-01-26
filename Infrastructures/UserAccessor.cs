@@ -33,5 +33,16 @@ namespace Infrastructures
                 throw new RestException(HttpStatusCode.Unauthorized, null);
             return user;
         }
+        public Guid GetId()
+        {
+            string username = httpContextAccessor.HttpContext.User?.Claims?
+                                .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (username == null)
+                throw new RestException(HttpStatusCode.Unauthorized, null);
+            User user = db.Users.FirstOrDefault(x => x.UserName == username);
+            if (user == null)
+                throw new RestException(HttpStatusCode.Unauthorized, null);
+            return user.Id;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -11,17 +12,28 @@ namespace Persistence
     public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DbSet<Component> Components { get; set; }
+        public DbSet<Library> Libraries { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Prop> Props { get; set; }
         public DataContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<User>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
+            builder.Entity<Component>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
+            builder.Entity<Library>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
 
             builder.Entity<User>().HasMany(t => t.Libraries)
                 .WithOne(g => g.Owner)
@@ -69,7 +81,26 @@ namespace Persistence
 
 
             //Seeding
-            new Seed(builder);
+            //new Seed(builder);
         }
+        //public override int SaveChanges()
+        //{
+        //    var entries = ChangeTracker
+        //        .Entries()
+        //        .Where(e => e.Entity is BaseTimeEntity && (
+        //                e.State == EntityState.Added
+        //                || e.State == EntityState.Modified));
+
+        //    foreach (var entityEntry in entries)
+        //    {
+
+        //        if (entityEntry.State == EntityState.Added)
+        //        {
+        //            ((BaseTimeEntity)entityEntry.Entity).Created = DateTime.Now;
+        //        }
+        //    }
+
+        //    return base.SaveChanges();
+        //}
     }
 }
