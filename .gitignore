@@ -1,6 +1,3 @@
-API/bin
-API/obj
-Application/bin
-Application/obj
-/bin
-API/obj
+*.dll
+*.pdb
+*.cache

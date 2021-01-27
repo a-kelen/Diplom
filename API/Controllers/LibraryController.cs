@@ -35,6 +35,11 @@ namespace API.Controllers
         {
             return await Mediator.Send(command);
         }
+        [HttpPost]
+        public async Task<ActionResult<LibraryDTO>> ReportLibrary(Create.Command command)
+        {
+            return await Mediator.Send(command);
+        }
 
         // PUT
         [HttpPut]
