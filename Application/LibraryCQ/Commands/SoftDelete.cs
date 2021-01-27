@@ -14,7 +14,7 @@ using Application.Exceptions;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.ComponentCQ.Commands
+namespace Application.LibraryCQ.Commands
 {
     public class SoftDelete
     {
@@ -42,16 +42,20 @@ namespace Application.ComponentCQ.Commands
                 public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
                 {
                     var userId = userAccessor.GetId();
-                    Component component = db.Components.FirstOrDefault(x => x.Id == request.Id);
+                    Library library = db.Libraries.Include(x => x.Components).FirstOrDefault(x => x.Id == request.Id);
+                    
+                    if (library == null)
+                        throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
+                    if (userId != library.UserId)
+                        throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
 
-                    if (component == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { Component = "Not found" });
-                    if (userId != component.UserId || component.LibraryId == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { Component = "Denied" });
-
-                    component.Deleted = ! component.Deleted;
+                    library.Deleted = !library.Deleted;
+                    foreach(var com in library.Components)
+                    {
+                        com.Deleted = library.Deleted;
+                    }
                     await db.SaveChangesAsync();
-                    return component.Deleted;
+                    return library.Deleted;
                 }
             }
         }

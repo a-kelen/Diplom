@@ -14,11 +14,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.LibraryCQ.Queries
+namespace Application.ComponentCQ.Queries
 {
     public class GetById
     {
-        public class Query : IRequest<LibraryDTO>
+        public class Query : IRequest<ComponentDTO>
         {
             public Guid Id { get; set; }
         }
@@ -29,31 +29,23 @@ namespace Application.LibraryCQ.Queries
                 RuleFor(x => x.Id).NotNull();
             }
         }
-        public class Handler : IRequestHandler<Query, LibraryDTO>
+        public class Handler : IRequestHandler<Query, ComponentDTO>
         {
             DataContext db;
             IMapper mapper;
-            iUserAccessor userAccessor;
             public Handler(DataContext dataContext
-                           , iUserAccessor userAccessor
+                           , iUserAccessor userAccesor
                            , IMapper mapper)
             {
                 this.db = dataContext;
                 this.mapper = mapper;
-                this.userAccessor = userAccessor;
             }
 
-            public async Task<LibraryDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ComponentDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                var userId = userAccessor.GetId();
-                var res = db.Libraries.FirstOrDefault(x => x.Id == request.Id);
+                var res = db.Components.FirstOrDefault(x => x.Id == request.Id);
 
-                if (res == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
-                if(res.Deleted && res.UserId != userId)
-                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
-
-                return mapper.Map<Library, LibraryDTO>(res);
+                return mapper.Map<Component, ComponentDTO>(res);
             }
         }
     }

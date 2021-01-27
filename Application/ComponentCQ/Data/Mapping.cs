@@ -12,7 +12,8 @@ namespace Application.ComponentCQ.Data
     {
         public Mapping()
         {
-            CreateMap<Component, ComponentDTO>();
+            CreateMap<Component, ComponentDTO>()
+                .ForMember(d => d.Status, o => o.MapFrom(r => r.Status ? "Public" : "Private") );
 
             CreateMap<Commands.Create.Command, Component>();
 

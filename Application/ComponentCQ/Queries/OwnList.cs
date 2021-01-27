@@ -39,11 +39,9 @@ namespace Application.UserCQ.Queries
 
             public async Task<List<ComponentDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = userAccesor.GetUser();
-                if (user == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
+                var userId = userAccesor.GetId();
 
-                var res = db.Components.Where(x => x.UserId == user.Id).ToList();
+                var res = db.Components.Where(x => x.UserId == userId).ToList();
                 return  mapper.Map<List<Component>, List<ComponentDTO>>(res);
             }
         }

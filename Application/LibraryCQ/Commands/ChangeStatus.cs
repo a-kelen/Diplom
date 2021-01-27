@@ -5,55 +5,54 @@ using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.LibraryCQ.Queries
+namespace Application.LibraryCQ.Commands
 {
-    public class GetById
+    public class ChangeStatus
     {
-        public class Query : IRequest<LibraryDTO>
+        public class Command : IRequest<bool>
         {
             public Guid Id { get; set; }
         }
-        public class Validator : AbstractValidator<Query>
+        public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
                 RuleFor(x => x.Id).NotNull();
             }
         }
-        public class Handler : IRequestHandler<Query, LibraryDTO>
+        public class Handler : IRequestHandler<Command, bool>
         {
             DataContext db;
-            IMapper mapper;
             iUserAccessor userAccessor;
             public Handler(DataContext dataContext
-                           , iUserAccessor userAccessor
-                           , IMapper mapper)
+                           , iUserAccessor userAccessor)
             {
                 this.db = dataContext;
-                this.mapper = mapper;
                 this.userAccessor = userAccessor;
             }
 
-            public async Task<LibraryDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
-                var res = db.Libraries.FirstOrDefault(x => x.Id == request.Id);
+                Library library = await db.Libraries.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (res == null)
+                if (library == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
-                if(res.Deleted && res.UserId != userId)
+                if (userId != library.UserId)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
 
-                return mapper.Map<Library, LibraryDTO>(res);
+                library.Status = !library.Status;
+                await db.SaveChangesAsync();
+                return library.Status;
             }
         }
     }

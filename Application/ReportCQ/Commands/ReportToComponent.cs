@@ -1,7 +1,6 @@
 ﻿using Application.DTO;
 using Application.Exceptions;
 using Application.Interfaces;
-using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
@@ -15,26 +14,23 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.LibraryCQ.Commands
+namespace Application.ReportCQ.Commands
 {
-    public class Edit
+    public class ReportToComponent
     {
-        public class Command : IRequest<LibraryDTO>
+        public class Command : IRequest<bool>
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public List<ComponentVM> Components { get; set; }
+            public string Content { get; set; }
         }
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                RuleFor(x => x.Name).NotEmpty();
-                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Id).NotNull();
             }
         }
-        public class Handler : IRequestHandler<Command, LibraryDTO>
+        public class Handler : IRequestHandler<Command, bool>
         {
             DataContext db;
             iUserAccessor userAccessor;
@@ -48,19 +44,18 @@ namespace Application.LibraryCQ.Commands
                 this.mapper = mapper;
             }
 
-            public async Task<LibraryDTO> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
-                Library library = await db.Libraries.FirstOrDefaultAsync(x => x.Id == request.Id);
+                var reportedComponent = await db.Components.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (library == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
-                if (userId != library.UserId)
-                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
+                if (reportedComponent == null || reportedComponent.LibraryId != null)
+                    throw new RestException(HttpStatusCode.NotFound, new { UserReport = "NotFound" });
 
-                db.Entry(library).CurrentValues.SetValues(request);
+                var cr = new ComponentReport { UserId = userId, ComponentId = reportedComponent.Id, Content = request.Content };
+                await db.ComponentReports.AddAsync(cr);
                 await db.SaveChangesAsync();
-                return mapper.Map<Library, LibraryDTO>(library);
+                return true;
             }
         }
     }

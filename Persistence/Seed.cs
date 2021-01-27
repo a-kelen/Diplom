@@ -7,22 +7,24 @@ using System.Text;
 
 namespace Persistence
 {
-    public class Seed
+    public static class Seed
     {
-        private ModelBuilder builder;
-        public Seed(ModelBuilder builder)
+        private static ModelBuilder builder;
+        public static void Init(ModelBuilder _builder)
         {
-            this.builder = builder;
-            this.UserSeed();
+            builder = _builder;
+            UserSeed();
         }
 
-        private void UserSeed()
+        private static void UserSeed()
         {
             string ADMIN_ID = "D2429ACD-E887-47F8-8AD2-6502E05C9068";
             var user = new User
             {
                 Id = new Guid(ADMIN_ID),
                 Email = "admin@gmail.com",
+                NormalizedEmail = "ADMIN@GMAIL.COM",
+                Created = DateTime.Now,
                 EmailConfirmed = true,
                 Firstname = "Admin",
                 Lastname = "Adminenko",
@@ -30,7 +32,7 @@ namespace Persistence
             };
             PasswordHasher<User> ph = new PasswordHasher<User>();
             user.PasswordHash = ph.HashPassword(user, "_123123Aa");
-            this.builder.Entity<User>().HasData(user);
+            builder.Entity<User>().HasData(user);
         }
     }
 }

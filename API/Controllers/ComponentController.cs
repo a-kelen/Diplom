@@ -28,6 +28,18 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("switch-status")]
+        public async Task<ActionResult<bool>> SwitchStatus(ChangeStatus.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("upload-files")]
+        public async Task<ActionResult<bool>> UploadFiles(IFormFileCollection files)
+        {
+            return true;
+        }
+
         // PUT
         [HttpPut]
         public async Task<ActionResult<ComponentDTO>> UpdateComponent(Edit.Command command)
