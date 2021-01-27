@@ -42,7 +42,7 @@ namespace Application.ReportCQ.Commands
                 this.db = dataContext;
                 this.userAccessor = userAccessor;
                 this.mapper = mapper;
-            }
+            }  
 
             public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
