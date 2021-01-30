@@ -54,6 +54,9 @@ namespace Persistence
             builder.Entity<User>().HasMany(t => t.Follows)
                 .WithOne(g => g.Person)
                 .HasForeignKey(g => g.PersonId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<User>().HasMany(t => t.UserReports)
+                .WithOne(g => g.Person)
+                .HasForeignKey(g => g.PersonId).OnDelete(DeleteBehavior.Restrict);
         }
         static void componentRelationships()
         {
@@ -70,6 +73,9 @@ namespace Persistence
             builder.Entity<Component>().HasMany(t => t.Files)
                 .WithOne(g => g.Component)
                 .HasForeignKey(g => g.ComponentId);
+            builder.Entity<Component>().HasMany(t => t.Reports)
+                .WithOne(g => g.Component)
+                .HasForeignKey(g => g.ComponentId).OnDelete(DeleteBehavior.Restrict); ;
         }
         static void libraryRelationships()
         {
@@ -78,6 +84,9 @@ namespace Persistence
                 .HasForeignKey(g => g.LibraryId).OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Library>().HasMany(t => t.Owned)
+                .WithOne(t => t.Library)
+                .HasForeignKey(x => x.LibraryId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Library>().HasMany(t => t.Reports)
                 .WithOne(t => t.Library)
                 .HasForeignKey(x => x.LibraryId).OnDelete(DeleteBehavior.Restrict);
         }

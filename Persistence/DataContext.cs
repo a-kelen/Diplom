@@ -15,15 +15,18 @@ namespace Persistence
         public DbSet<LibraryReport> LibraryReports { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
         public DbSet<Component> Components { get; set; }
+        public DbSet<Follower>  Followers{ get; set; }
         public DbSet<Library> Libraries { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<File> Files { get; set; }
         public DbSet<Prop> Props { get; set; }
 
         public DataContext(DbContextOptions options) : base(options)
         {
             if(false)
             {
-                //Database.EnsureDeleted();
+                Database.EnsureDeleted();
                 Database.EnsureCreated();
             }
             

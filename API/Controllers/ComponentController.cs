@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ComponentDTO>> Create(Create.Command command)
+        public async Task<ActionResult<ComponentDTO>> Create([FromForm]Create.Command command)
         {
             return await Mediator.Send(command);
         }
@@ -34,10 +34,11 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpPost("upload-files")]
-        public async Task<ActionResult<bool>> UploadFiles(IFormFileCollection files)
+       
+        [HttpPost("like")]
+        public async Task<ActionResult<bool>> LikeLibrary(ComponentLike.Command command)
         {
-            return true;
+            return await Mediator.Send(command);
         }
 
         // PUT

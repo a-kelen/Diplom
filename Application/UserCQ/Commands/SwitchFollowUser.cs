@@ -1,11 +1,10 @@
 ﻿using Application.DTO;
+using Application.Exceptions;
 using Application.Interfaces;
-using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
@@ -14,26 +13,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.LibraryCQ.Commands
+namespace Application.UserCQ.Commands
 {
-    public class Create
+    public class SwitchFollowUser
     {
-        public class Command : IRequest<LibraryDTO>
+        public class Command : IRequest<bool>
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public List<ComponentVM> Components { get; set; }
-            public List<IFormFile> Files { get; set; }
-
+            public Guid Id { get; set; }
         }
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Id).NotNull();
             }
         }
-        public class Handler : IRequestHandler<Command, LibraryDTO>
+        public class Handler : IRequestHandler<Command, bool>
         {
             DataContext db;
             iUserAccessor userAccessor;
@@ -47,14 +42,21 @@ namespace Application.LibraryCQ.Commands
                 this.mapper = mapper;
             }
 
-            public async Task<LibraryDTO> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
-                Library library = mapper.Map<Command, Library>(request);
-                library.UserId = userAccessor.GetId();
-                var res = await db.Libraries.AddAsync(library);
+                var userId = userAccessor.GetId();
+                var follower = await db.Followers.FirstOrDefaultAsync(x => x.UserId == userId && x.PersonId == request.Id);
+                
+                if (follower == null)
+                {
+                    await db.Followers.AddAsync(new Follower { UserId = userId, PersonId = request.Id });
+                } 
+                else
+                {
+                    db.Followers.Remove(follower);
+                }
                 await db.SaveChangesAsync();
-
-                return mapper.Map<Library, LibraryDTO>(res.Entity);
+                return true;
             }
         }
     }

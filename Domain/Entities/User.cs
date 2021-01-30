@@ -20,5 +20,6 @@ namespace Domain.Entities
         public List<Component> Components { get; set; }
         public List<OwnedLibrary> OwnedLibraries { get; set; }
         public List<OwnedComponent> OwnedComponents { get; set; }
+        public List<UserReport> UserReports { get; set; }
     }
 }

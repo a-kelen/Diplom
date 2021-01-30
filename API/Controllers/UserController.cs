@@ -17,6 +17,13 @@ namespace API.Controllers
     [ApiController]
     public class UserController : BaseConttoller
     {
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<UserDTO>> CurrentUser()
+        {
+            return await Mediator.Send(new Current.Query());
+        }
+
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(Login.Command query)
@@ -31,13 +38,14 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<ActionResult<UserDTO>> CurrentUser()
+        [HttpPost("follow")]
+        public async Task<ActionResult<bool>> SwitchFollow(SwitchFollowUser.Command command)
         {
-            return await Mediator.Send(new Current.Query());
+            return await Mediator.Send(command);
         }
-        
-        
+
+
+
+
     }
 }

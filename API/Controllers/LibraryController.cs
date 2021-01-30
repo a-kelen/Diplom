@@ -28,18 +28,20 @@ namespace API.Controllers
         {
             return await Mediator.Send(new GetById.Query { Id = id });
         }
-
+          
         //POST
         [HttpPost]
-        public async Task<ActionResult<LibraryDTO>> CreateLibrary(Create.Command command)
+        public async Task<ActionResult<LibraryDTO>> CreateLibrary([FromForm]Create.Command command)
         {
             return await Mediator.Send(command);
         }
-        [HttpPost]
-        public async Task<ActionResult<LibraryDTO>> ReportLibrary(Create.Command command)
+
+        [HttpPost("like")]
+        public async Task<ActionResult<bool>> LikeLibrary(LibraryLike.Command command)
         {
             return await Mediator.Send(command);
         }
+
 
         // PUT
         [HttpPut]

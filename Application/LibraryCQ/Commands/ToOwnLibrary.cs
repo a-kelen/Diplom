@@ -1,36 +1,33 @@
 ﻿using Application.DTO;
+using Application.Exceptions;
 using Application.Interfaces;
-using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.LibraryCQ.Commands
 {
-    public class Create
+    public class ToOwnLibrary
     {
         public class Command : IRequest<LibraryDTO>
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public List<ComponentVM> Components { get; set; }
-            public List<IFormFile> Files { get; set; }
+            public Guid Id { get; set; }
 
         }
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                RuleFor(x => x.Name).NotEmpty();
+
             }
         }
         public class Handler : IRequestHandler<Command, LibraryDTO>
@@ -49,12 +46,17 @@ namespace Application.LibraryCQ.Commands
 
             public async Task<LibraryDTO> Handle(Command request, CancellationToken cancellationToken)
             {
-                Library library = mapper.Map<Command, Library>(request);
-                library.UserId = userAccessor.GetId();
-                var res = await db.Libraries.AddAsync(library);
-                await db.SaveChangesAsync();
+                var user = userAccessor.GetUser();
+                var library = await db.Libraries.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                return mapper.Map<Library, LibraryDTO>(res.Entity);
+                if (library == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
+                if (user.Id == library.UserId)
+                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
+
+                user.OwnedLibraries.Add(new OwnedLibrary { LibraryId = library.Id });
+                await db.SaveChangesAsync();
+                return mapper.Map<Library, LibraryDTO>(library);
             }
         }
     }

@@ -1,35 +1,33 @@
 ﻿using Application.DTO;
+using Application.Exceptions;
 using Application.Interfaces;
-using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.ComponentCQ.Commands
 {
-    public class Create
+    public class ToOwnComponent
     {
         public class Command : IRequest<ComponentDTO>
         {
-            public string Description { get; set;}
-            public List<EventVM> Events { get; set; }
-            public List<PropVM> Props { get; set; }
+            public Guid Id { get; set; }
 
         }
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                //RuleFor(x => x.Description).NotEmpty();
+                
             }
         }
         public class Handler : IRequestHandler<Command, ComponentDTO>
@@ -48,12 +46,17 @@ namespace Application.ComponentCQ.Commands
 
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
             {
-                Component component = mapper.Map<Command, Component>(request);
-                component.UserId = userAccessor.GetId();
+                var user = userAccessor.GetUser();
+                var component = await db.Components.FirstOrDefaultAsync(x => x.Id == request.Id);
+                if (component == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Component = "Not found" });
+                if (user.Id == component.UserId)
+                    throw new RestException(HttpStatusCode.NotFound, new { Component = "Denied" });
 
-                var res = await db.Components.AddAsync(component);
-                await db.SaveChangesAsync();
-                return mapper.Map<Component, ComponentDTO>(res.Entity);
+                user.OwnedComponents.Add(new OwnedComponent { ComponentId = component.Id });
+                db.SaveChanges();
+
+                return mapper.Map<Component, ComponentDTO>(component);
             }
         }
     }

@@ -8,6 +8,5 @@ namespace Application.DTO
     {
         public Guid ReportedUserId { get; set; }
         public bool Status { get; set; }
-
     }
 }
