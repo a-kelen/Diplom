@@ -22,8 +22,8 @@ namespace Application.LibraryCQ.Commands
         {
             public string Name { get; set; }
             public string Description { get; set; }
+            public bool Status { get; set; }
             public List<ComponentVM> Components { get; set; }
-            public List<IFormFile> Files { get; set; }
 
         }
         public class Validator : AbstractValidator<Command>

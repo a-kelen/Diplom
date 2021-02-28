@@ -5,11 +5,13 @@ using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -38,22 +40,33 @@ namespace Application.FileCQ.Commands
             DataContext db;
             iUserAccessor userAccessor;
             IMapper mapper;
+            IHostingEnvironment environment;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccessor
-                           , IMapper mapper)
+                           , IMapper mapper
+                           , IHostingEnvironment appEnvironment)
             {
                 this.db = dataContext;
                 this.userAccessor = userAccessor;
                 this.mapper = mapper;
+                environment = appEnvironment;
             }
 
             public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
-                List<File> Files = new List<File>();
+                string path = Path.Combine(environment.WebRootPath, "Files", request.ElementId.ToString());
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                List<Domain.Entities.File> Files = new List<Domain.Entities.File>();
                 foreach (var f in request.Files)
                 {
-                    Files.Add(new File { Path = f.FileName });
+                    Files.Add(new Domain.Entities.File { Path = f.FileName });
+                    using (var fileStream = new FileStream(Path.Combine(path, f.FileName), FileMode.Create) )
+                    {
+                        await f.CopyToAsync(fileStream);
+                    }
                 }
+
 
                 if (request.Descriminator == "component")
                 {

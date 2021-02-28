@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Application.ComponentCQ.Queries
 {
     public class GetById
     {
-        public class Query : IRequest<ComponentDTO>
+        public class Query : IRequest<DetailedComponentDTO>
         {
             public Guid Id { get; set; }
         }
@@ -29,7 +30,7 @@ namespace Application.ComponentCQ.Queries
                 RuleFor(x => x.Id).NotNull();
             }
         }
-        public class Handler : IRequestHandler<Query, ComponentDTO>
+        public class Handler : IRequestHandler<Query, DetailedComponentDTO>
         {
             DataContext db;
             IMapper mapper;
@@ -41,11 +42,16 @@ namespace Application.ComponentCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<ComponentDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<DetailedComponentDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                var res = db.Components.FirstOrDefault(x => x.Id == request.Id);
+                var res = db.Components
+                    .Include(x => x.Owner)
+                    .Include(x => x.Library)
+                    .Include(x => x.Events)
+                    .Include(x => x.Props)
+                    .FirstOrDefault(x => x.Id == request.Id);
 
-                return mapper.Map<Component, ComponentDTO>(res);
+                return mapper.Map<Component, DetailedComponentDTO>(res);
             }
         }
     }

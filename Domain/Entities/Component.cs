@@ -7,7 +7,7 @@ namespace Domain.Entities
     public class Component : BaseTimeEntity
     {
         public User Owner { get; set; }
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string Name { get; set; }
         public bool Status { get; set; }
         public string File { get; set; }

@@ -155,7 +155,7 @@ namespace API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Diplom API");
                 c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
             });
-
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

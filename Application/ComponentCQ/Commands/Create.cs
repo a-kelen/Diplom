@@ -21,6 +21,7 @@ namespace Application.ComponentCQ.Commands
         public class Command : IRequest<ComponentDTO>
         {
             public string Description { get; set;}
+            public bool Status { get; set; }
             public List<EventVM> Events { get; set; }
             public List<PropVM> Props { get; set; }
 

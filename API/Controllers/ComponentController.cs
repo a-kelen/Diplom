@@ -1,4 +1,5 @@
 ﻿using Application.ComponentCQ.Commands;
+using Application.ComponentCQ.Queries;
 using Application.DTO;
 using Application.UserCQ.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -22,8 +23,14 @@ namespace API.Controllers
             return await Mediator.Send(new OwnList.Query());
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DetailedComponentDTO>> GetComponentById(Guid id)
+        {
+            return await Mediator.Send(new GetById.Query { Id = id });
+        }
+
         [HttpPost]
-        public async Task<ActionResult<ComponentDTO>> Create([FromForm]Create.Command command)
+        public async Task<ActionResult<ComponentDTO>> Create(Create.Command command)
         {
             return await Mediator.Send(command);
         }

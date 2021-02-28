@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.UserCQ.Queries
 {
@@ -41,7 +42,7 @@ namespace Application.UserCQ.Queries
             {
                 var userId = userAccesor.GetId();
 
-                var res = db.Components.Where(x => x.UserId == userId).ToList();
+                var res = db.Components.Where(x => x.UserId == userId).Include(x => x.Owner).ToList();
                 return  mapper.Map<List<Component>, List<ComponentDTO>>(res);
             }
         }

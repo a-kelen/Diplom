@@ -12,10 +12,16 @@ namespace Application.LibraryCQ.Data
     {
         public Mapping()
         {
-            CreateMap<Library, LibraryDTO>();
+            CreateMap<Library, LibraryDTO>()
+                .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
+                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
+                .ForMember(d => d.ComponentsCount, o => o.MapFrom(r => r.Components.Count));
+            CreateMap<Library, DetailedLibraryDTO>()
+                .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
+                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName));
 
             CreateMap<Commands.Create.Command, Library>();
-
+            
             CreateMap<ComponentVM, Component>();
 
 

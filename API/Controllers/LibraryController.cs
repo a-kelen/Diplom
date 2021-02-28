@@ -24,14 +24,14 @@ namespace API.Controllers
         }
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<LibraryDTO>> GetLibrary(Guid id)
+        public async Task<ActionResult<DetailedLibraryDTO>> GetLibrary(Guid id)
         {
             return await Mediator.Send(new GetById.Query { Id = id });
         }
           
         //POST
         [HttpPost]
-        public async Task<ActionResult<LibraryDTO>> CreateLibrary([FromForm]Create.Command command)
+        public async Task<ActionResult<LibraryDTO>> CreateLibrary(Create.Command command)
         {
             return await Mediator.Send(command);
         }
