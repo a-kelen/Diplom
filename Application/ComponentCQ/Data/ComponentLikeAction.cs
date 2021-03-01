@@ -25,6 +25,7 @@ namespace Application.ComponentCQ.Data
         {
             var id = userAccessor.GetId();
             destination.Liked = db.Likes.Where(x => x.ElementId == destination.Id && x.UserId == id).Count() > 0;
+            destination.Owned = db.OwnedComponents.Any(x => x.UserId == id && x.ComponentId == destination.Id);
 
         }
     }

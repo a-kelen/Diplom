@@ -26,7 +26,7 @@ namespace Application.LibraryCQ.Data
             var id = userAccessor.GetId();
             destination.Likes = db.Likes.Where(x => x.ElementId == destination.Id).Count();
             destination.Liked = db.Likes.Where(x => x.ElementId == destination.Id && x.UserId == id).Count() > 0;
-
+            destination.Owned = db.OwnedLibraries.Any(x => x.UserId == id && x.LibraryId == destination.Id);
         }
     }
 }

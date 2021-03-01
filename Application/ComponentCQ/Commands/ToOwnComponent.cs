@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -52,6 +53,8 @@ namespace Application.ComponentCQ.Commands
                     throw new RestException(HttpStatusCode.NotFound, new { Component = "Not found" });
                 if (user.Id == component.UserId)
                     throw new RestException(HttpStatusCode.NotFound, new { Component = "Denied" });
+                if (db.OwnedComponents.Any(x => x.ComponentId == component.Id && x.UserId == user.Id))
+                    throw new RestException(HttpStatusCode.NotFound, new { Component = "Exist" });
 
                 user.OwnedComponents.Add(new OwnedComponent { ComponentId = component.Id });
                 db.SaveChanges();

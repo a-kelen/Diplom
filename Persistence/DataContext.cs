@@ -12,7 +12,9 @@ namespace Persistence
     public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DbSet<ComponentReport> ComponentReports { get; set; }
+        public DbSet<OwnedComponent> OwnedComponents { get; set; }
         public DbSet<LibraryReport> LibraryReports { get; set; }
+        public DbSet<OwnedLibrary> OwnedLibraries { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<Follower>  Followers{ get; set; }

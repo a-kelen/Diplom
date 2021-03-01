@@ -29,6 +29,7 @@ namespace API.Controllers
             return await Mediator.Send(new GetById.Query { Id = id });
         }
 
+        //POST
         [HttpPost]
         public async Task<ActionResult<ComponentDTO>> Create(Create.Command command)
         {
@@ -41,7 +42,12 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-       
+        [HttpPost("get-own")]
+        public async Task<ActionResult<ComponentDTO>> GetOWn(ToOwnComponent.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
         [HttpPost("like")]
         public async Task<ActionResult<bool>> LikeLibrary(ComponentLike.Command command)
         {

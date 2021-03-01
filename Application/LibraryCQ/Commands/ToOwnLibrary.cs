@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -53,6 +54,8 @@ namespace Application.LibraryCQ.Commands
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
                 if (user.Id == library.UserId)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
+                if(db.OwnedLibraries.Any(x => x.LibraryId == library.Id && x.UserId == user.Id))
+                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Exist" });
 
                 user.OwnedLibraries.Add(new OwnedLibrary { LibraryId = library.Id });
                 await db.SaveChangesAsync();

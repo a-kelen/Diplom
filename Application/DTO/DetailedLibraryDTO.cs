@@ -8,6 +8,7 @@ namespace Application.DTO
     {
         public Guid Id { get; set; }
         public int Likes { get; set; }
+        public bool Owned { get; set; }
         public bool Liked { get; set; }
         public string Name { get; set; }
         public string Author { get; set; }

@@ -41,6 +41,11 @@ namespace API.Controllers
         {
             return await Mediator.Send(command);
         }
+        [HttpPost("get-own")]
+        public async Task<ActionResult<LibraryDTO>> GetOWn(ToOwnLibrary.Command command)
+        {
+            return await Mediator.Send(command);
+        }
 
 
         // PUT
