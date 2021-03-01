@@ -18,7 +18,8 @@ namespace Application.LibraryCQ.Data
                 .ForMember(d => d.ComponentsCount, o => o.MapFrom(r => r.Components.Count));
             CreateMap<Library, DetailedLibraryDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
-                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName));
+                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
+                .AfterMap<LikeAction>();
 
             CreateMap<Commands.Create.Command, Library>();
             

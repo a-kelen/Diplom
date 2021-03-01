@@ -46,7 +46,7 @@ namespace Application.ComponentCQ.Commands
             public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
-                var component = db.Components.FirstOrDefaultAsync(x => x.Id == request.Id);
+                var component = await db.Components.FirstOrDefaultAsync(x => x.Id == request.Id);
                 var like = await db.Likes.FirstOrDefaultAsync(x => x.UserId == userId && x.ElementId == request.Id);
 
                 if (component == null)
@@ -54,7 +54,7 @@ namespace Application.ComponentCQ.Commands
 
                 if (like == null)
                 {
-                    var l = new Like { UserId = userId, ElementId = like.Id, Descriminator = LikeDescriminator.Component };
+                    var l = new Like { UserId = userId, ElementId = component.Id, Descriminator = LikeDescriminator.Component };
                     await db.Likes.AddAsync(l);
                 }
                 else

@@ -7,6 +7,7 @@ namespace Application.DTO
     public class DetailedComponentDTO
     {
         public Guid Id { get; set; }
+        public bool Liked { get; set; }
         public string Name { get; set; }
         public string Author { get; set; }
         public string Format { get; set; }

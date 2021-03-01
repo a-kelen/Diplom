@@ -20,7 +20,8 @@ namespace Application.ComponentCQ.Data
                 .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
                 .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
                 .ForMember(d => d.Events, o => o.MapFrom(r => r.Events))
-                .ForMember(d => d.Props, o => o.MapFrom(r => r.Props));
+                .ForMember(d => d.Props, o => o.MapFrom(r => r.Props))
+                .AfterMap<ComponentLikeAction>();
 
             CreateMap<Commands.Create.Command, Component>();
 

@@ -46,7 +46,7 @@ namespace Application.LibraryCQ.Commands
             public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
-                var library = db.Libraries.FirstOrDefaultAsync(x => x.Id == request.Id);
+                var library = await db.Libraries.FirstOrDefaultAsync(x => x.Id == request.Id);
                 var like = await db.Likes.FirstOrDefaultAsync(x => x.UserId == userId && x.ElementId == request.Id);
 
                 if (library == null)
@@ -54,7 +54,7 @@ namespace Application.LibraryCQ.Commands
 
                 if (like == null)
                 {
-                    var l = new Like { UserId = userId, ElementId = like.Id, Descriminator = LikeDescriminator.Library };
+                    var l = new Like { UserId = userId, ElementId = library.Id, Descriminator = LikeDescriminator.Library };
                     await db.Likes.AddAsync(l);
                 }
                 else
