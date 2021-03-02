@@ -56,7 +56,7 @@ namespace Application.ComponentCQ.Commands
                 if (db.OwnedComponents.Any(x => x.ComponentId == component.Id && x.UserId == user.Id))
                     throw new RestException(HttpStatusCode.NotFound, new { Component = "Exist" });
 
-                user.OwnedComponents.Add(new OwnedComponent { ComponentId = component.Id });
+                db.OwnedComponents.Add(new OwnedComponent { ComponentId = component.Id, UserId = user.Id });
                 db.SaveChanges();
 
                 return mapper.Map<Component, ComponentDTO>(component);

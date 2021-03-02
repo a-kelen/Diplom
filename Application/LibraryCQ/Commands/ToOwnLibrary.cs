@@ -57,7 +57,7 @@ namespace Application.LibraryCQ.Commands
                 if(db.OwnedLibraries.Any(x => x.LibraryId == library.Id && x.UserId == user.Id))
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Exist" });
 
-                user.OwnedLibraries.Add(new OwnedLibrary { LibraryId = library.Id });
+                db.OwnedLibraries.Add(new OwnedLibrary { LibraryId = library.Id , UserId = user.Id});
                 await db.SaveChangesAsync();
                 return mapper.Map<Library, LibraryDTO>(library);
             }

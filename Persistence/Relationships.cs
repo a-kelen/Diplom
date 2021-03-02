@@ -29,6 +29,12 @@ namespace Persistence
             builder.Entity<Library>()
                 .Property(b => b.Created)
                 .HasDefaultValueSql("getdate()");
+            builder.Entity<OwnedLibrary>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
+            builder.Entity<OwnedComponent>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
         }
         static void userRelationships()
         {

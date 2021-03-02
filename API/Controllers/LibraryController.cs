@@ -22,13 +22,26 @@ namespace API.Controllers
         {
             return await Mediator.Send(new OwnLibraryList.Query());
         }
-        
+
+        [HttpGet("ownedLibraryList")]
+        public async Task<ActionResult<List<LibraryDTO>>> GetOwnedLibraries()
+        {
+            return await Mediator.Send(new OwnedList.Query());
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<DetailedLibraryDTO>> GetLibrary(Guid id)
         {
             return await Mediator.Send(new GetById.Query { Id = id });
         }
-          
+
+        [HttpGet("liked")]
+        public async Task<ActionResult<List<LibraryDTO>>> GetLikedLibraries()
+        {
+            return await Mediator.Send(new LikedList.Query());
+        }
+
+
         //POST
         [HttpPost]
         public async Task<ActionResult<LibraryDTO>> CreateLibrary(Create.Command command)

@@ -23,10 +23,21 @@ namespace API.Controllers
             return await Mediator.Send(new OwnList.Query());
         }
 
+        [HttpGet("ownedComponentList")]
+        public async Task<ActionResult<List<ComponentDTO>>> GetOwnedComponents()
+        {
+            return await Mediator.Send(new OwnedList.Query());
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<DetailedComponentDTO>> GetComponentById(Guid id)
         {
             return await Mediator.Send(new GetById.Query { Id = id });
+        }
+
+        [HttpGet("liked")]
+        public async Task<ActionResult<List<ComponentDTO>>> GetLikedLibraries()
+        {
+            return await Mediator.Send(new LikedList.Query());
         }
 
         //POST
