@@ -11,11 +11,11 @@ namespace Application.UserCQ.Data
     {
         public Mapping()
         {
-            CreateMap<User, UserDTO>();
-                //.ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
-                //.ForMember(x => x.Name, o => o.MapFrom(s => s.Firstname + " " + s.Lastname))
-                //.ForMember(x => x.Nickname, o => o.MapFrom(s => s.Nickname))
-                //.ForMember(x => x.Email, o => o.MapFrom(s => s.Email));
+            CreateMap<User, UserDTO>()
+                .ForMember(x => x.Name, o => o.MapFrom(s => s.Firstname + " " + s.Lastname))
+                .ForMember(x => x.Username, o => o.MapFrom(s => s.UserName))
+                .ForMember(x => x.Email, o => o.MapFrom(s => s.Email))
+                .AfterMap<TokenAction>();
         }
     }
 }

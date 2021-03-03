@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Application.UserCQ.Commands
 {
@@ -35,12 +36,12 @@ namespace Application.UserCQ.Commands
         {
             private readonly UserManager<User> _userManager;
             private readonly SignInManager<User> _signInManager;
-            private readonly iJWTGenerator _jwtGenerator;
-            public Handler(UserManager<User> userManager, SignInManager<User> signInManager, iJWTGenerator jwtGenerator)
+            private readonly IMapper mapper;
+            public Handler(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
             {
-                _jwtGenerator = jwtGenerator;
-                _signInManager = signInManager;
-                _userManager = userManager;
+                this.mapper = mapper;
+                this._signInManager = signInManager;
+                this._userManager = userManager;
             }
 
             public async Task<UserDTO> Handle(Command request, CancellationToken cancellationToken)
@@ -55,14 +56,7 @@ namespace Application.UserCQ.Commands
 
                 if (result.Succeeded)
                 {
-                    // TODO: generate token
-                    return new UserDTO
-                    {
-                        DisplayName = user.Email,
-                        Token = _jwtGenerator.CreateToken(user),
-                        Username = user.UserName,
-                        Image = null
-                    };
+                    return mapper.Map<User, UserDTO>(user);
                 }
 
                 throw new RestException(HttpStatusCode.Unauthorized, null);

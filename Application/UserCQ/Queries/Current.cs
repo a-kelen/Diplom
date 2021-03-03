@@ -43,13 +43,8 @@ namespace Application.UserCQ.Queries
                 var user = userAccesor.GetUser();
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
-                return new UserDTO
-                {
-                    DisplayName = user.Email,
-                    Username = user.UserName,
-                    Token = _jwtGenerator.CreateToken(user),
-                    Image = null
-                };
+                
+                return mapper.Map<User, UserDTO>(user);
             }
         }
     }
