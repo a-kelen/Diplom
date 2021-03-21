@@ -7,6 +7,6 @@ namespace Application.DTO
     public class EventDTO
     {
         public string Name { get; set; }
-        public string Desciption { get; set; }
+        public string Description { get; set; }
     }
 }

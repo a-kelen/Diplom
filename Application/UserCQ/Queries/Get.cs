@@ -15,43 +15,46 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ComponentCQ.Queries
+namespace Application.UserCQ.Queries
 {
-    public class GetById
+    public class Get
     {
-        public class Query : IRequest<DetailedComponentDTO>
+        public class Query : IRequest<DetailedUserDTO>
         {
-            public Guid Id { get; set; }
+            public string Username { get; set; }
         }
         public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {
-                RuleFor(x => x.Id).NotNull();
+
             }
         }
-        public class Handler : IRequestHandler<Query, DetailedComponentDTO>
+        public class Handler : IRequestHandler<Query, DetailedUserDTO>
         {
             DataContext db;
+            iUserAccessor userAccesor;
             IMapper mapper;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccesor
                            , IMapper mapper)
             {
                 this.db = dataContext;
+                this.userAccesor = userAccesor;
                 this.mapper = mapper;
             }
 
-            public async Task<DetailedComponentDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<DetailedUserDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                var res = db.Components
-                    .Include(x => x.Owner)
-                    .Include(x => x.Library).ThenInclude(x => x.Owner)
-                    .Include(x => x.Events)
-                    .Include(x => x.Props)
-                    .FirstOrDefault(x => x.Id == request.Id);
+                var user = db.Users
+                    .Include(x => x.Components)
+                    .Include(x => x.Libraries)
+                    .FirstOrDefault(x => x.UserName == request.Username);
 
-                return mapper.Map<Component, DetailedComponentDTO>(res);
+                if (user == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
+
+                return mapper.Map <User, DetailedUserDTO> (user);
             }
         }
     }

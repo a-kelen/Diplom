@@ -72,6 +72,7 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        // DELETE
         [HttpDelete]
         public async Task<ActionResult<bool>> SoftDelete(SoftDelete.Command command)
         {   

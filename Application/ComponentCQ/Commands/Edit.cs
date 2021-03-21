@@ -51,7 +51,10 @@ namespace Application.ComponentCQ.Commands
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
-                Component component = await db.Components.FirstOrDefaultAsync(x => x.Id == request.Id);
+                Component component = await db.Components
+                    .Include(x => x.Props)
+                    .Include(x => x.Events)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 if (component == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Component = "Not found" });
@@ -59,6 +62,8 @@ namespace Application.ComponentCQ.Commands
                     throw new RestException(HttpStatusCode.NotFound, new { Component = "Denied" });
 
                 db.Entry(component).CurrentValues.SetValues(request);
+                component.Events = mapper.Map<List<EventVM>, List<Event>>(request.Events);
+                component.Props = mapper.Map<List<PropVM>, List<Prop>>(request.Props);
                 await db.SaveChangesAsync();
                 return mapper.Map<Component, ComponentDTO>(component);
             }

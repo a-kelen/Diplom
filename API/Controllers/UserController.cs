@@ -24,6 +24,13 @@ namespace API.Controllers
             return await Mediator.Send(new Current.Query());
         }
 
+        [HttpGet("{username}")]
+        [Authorize]
+        public async Task<ActionResult<DetailedUserDTO>> GetUser(string username)
+        {
+            return await Mediator.Send(new Get.Query { Username = username});
+        }
+
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(Login.Command query)

@@ -22,15 +22,13 @@ namespace Application.LibraryCQ.Commands
         public class Command : IRequest<LibraryDTO>
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }
             public string Description { get; set; }
-            public List<ComponentVM> Components { get; set; }
         }
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                RuleFor(x => x.Name).NotEmpty();
+                //RuleFor(x => x.Name).NotEmpty();
                 RuleFor(x => x.Description).NotEmpty();
             }
         }

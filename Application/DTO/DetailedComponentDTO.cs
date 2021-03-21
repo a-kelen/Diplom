@@ -13,6 +13,7 @@ namespace Application.DTO
         public string Author { get; set; }
         public string Format { get; set; }
         public string Status { get; set; }
+        public string Library { get; set; }
         public string Description { get; set; }
         public List<PropDTO> Props { get; set; }
         public List<EventDTO> Events { get; set; }

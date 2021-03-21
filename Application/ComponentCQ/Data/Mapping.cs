@@ -18,9 +18,11 @@ namespace Application.ComponentCQ.Data
 
             CreateMap<Component, DetailedComponentDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
-                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
+                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName != null ? r.Owner.UserName : r.Library.Owner.UserName))
+                .ForMember(d => d.Library, o => o.MapFrom(r => r.Library.Name))
                 .ForMember(d => d.Events, o => o.MapFrom(r => r.Events))
                 .ForMember(d => d.Props, o => o.MapFrom(r => r.Props))
+                .ForMember(d => d.Description, o => o.MapFrom(r => r.Description ?? ""))
                 .AfterMap<ComponentLikeAction>();
 
             CreateMap<Commands.Create.Command, Component>();
