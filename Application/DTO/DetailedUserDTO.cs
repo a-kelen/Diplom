@@ -9,6 +9,7 @@ namespace Application.DTO
         public string Name { get; set; }
         public string Email { get; set; }
         public string Image { get; set; }
+        public bool Followed { get; set; }
         public string Username { get; set; }
         public List<LibraryDTO> Libraries { get; set; }
         public List<ComponentDTO> Components { get; set; }

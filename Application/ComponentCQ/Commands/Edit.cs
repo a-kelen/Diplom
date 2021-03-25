@@ -54,11 +54,12 @@ namespace Application.ComponentCQ.Commands
                 Component component = await db.Components
                     .Include(x => x.Props)
                     .Include(x => x.Events)
+                    .Include(x => x.Library)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 if (component == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Component = "Not found" });
-                if (userId != component.UserId)
+                if (userId != component.UserId && userId != component.Library.UserId)
                     throw new RestException(HttpStatusCode.NotFound, new { Component = "Denied" });
 
                 db.Entry(component).CurrentValues.SetValues(request);

@@ -40,6 +40,13 @@ namespace API.Controllers
             return await Mediator.Send(new LikedList.Query());
         }
 
+        [HttpGet("download/{id}")]
+        public async Task<ActionResult<List<ComponentDTO>>> DownLoad(Guid id)
+        {
+
+            return await Mediator.Send(new Download.Query { Id = id });
+        }
+
         //POST
         [HttpPost]
         public async Task<ActionResult<ComponentDTO>> Create(Create.Command command)

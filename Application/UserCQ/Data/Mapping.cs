@@ -20,7 +20,8 @@ namespace Application.UserCQ.Data
             CreateMap<User, DetailedUserDTO>()
                 .ForMember(x => x.Name, o => o.MapFrom(s => s.Firstname + " " + s.Lastname))
                 .ForMember(x => x.Username, o => o.MapFrom(s => s.UserName))
-                .ForMember(x => x.Email, o => o.MapFrom(s => s.Email));
+                .ForMember(x => x.Email, o => o.MapFrom(s => s.Email))
+                .AfterMap<FollowedAction>();
         }
     }
 }
