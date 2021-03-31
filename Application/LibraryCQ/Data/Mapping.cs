@@ -15,12 +15,13 @@ namespace Application.LibraryCQ.Data
             CreateMap<Library, LibraryDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
                 .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
-                .ForMember(d => d.ComponentsCount, o => o.MapFrom(r => r.Components.Count));
+                .ForMember(d => d.ComponentsCount, o => o.MapFrom(r => r.Components.Count))
+                .AfterMap<LibraryItemLikeAction>();
 
             CreateMap<Library, DetailedLibraryDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
                 .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
-                .AfterMap<LikeAction>();
+                .AfterMap<LibraryLikeAction>();
 
             CreateMap<Commands.Create.Command, Library>();
             

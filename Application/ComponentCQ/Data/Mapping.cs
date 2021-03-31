@@ -14,7 +14,8 @@ namespace Application.ComponentCQ.Data
         {
             CreateMap<Component, ComponentDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
-                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName));
+                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
+                .AfterMap<ComponentItemLikeAction>();
 
             CreateMap<Component, DetailedComponentDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))

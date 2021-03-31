@@ -35,6 +35,12 @@ namespace API.Controllers
             return await Mediator.Send(new GetById.Query { Id = id });
         }
 
+        [HttpGet("{author}/{name}")]
+        public async Task<ActionResult<DetailedLibraryDTO>> GetLibraryByAuthorAndName(string author, string name)
+        {
+            return await Mediator.Send(new GetByAuthorAndName.Query { Author = author, Name = name});
+        }
+
         [HttpGet("liked")]
         public async Task<ActionResult<List<LibraryDTO>>> GetLikedLibraries()
         {

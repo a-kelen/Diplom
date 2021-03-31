@@ -10,12 +10,12 @@ using System.Text;
 
 namespace Application.LibraryCQ.Data
 {
-    public class LikeAction : IMappingAction<Library, DetailedLibraryDTO>
+    public class LibraryLikeAction : IMappingAction<Library, DetailedLibraryDTO>
     {
         DataContext db;
         iUserAccessor userAccessor;
 
-        public LikeAction(DataContext context, iUserAccessor accessor)
+        public LibraryLikeAction(DataContext context, iUserAccessor accessor)
         {
             db = context ?? throw new ArgumentNullException(nameof(context));
             userAccessor = accessor;

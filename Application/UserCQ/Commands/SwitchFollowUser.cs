@@ -57,7 +57,7 @@ namespace Application.UserCQ.Commands
                 {
                     await db.Followers.AddAsync(new Follower { UserId = userId, PersonId = person.Id });
                     result = true;
-                } 
+                }
                 else
                 {
                     db.Followers.Remove(follower);

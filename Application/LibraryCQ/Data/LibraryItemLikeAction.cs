@@ -8,26 +8,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Application.ComponentCQ.Data
+namespace Application.LibraryCQ.Data
 {
-    public class ComponentLikeAction : IMappingAction<Component, DetailedComponentDTO>
+    public class LibraryItemLikeAction : IMappingAction<Library, LibraryDTO>
     {
         DataContext db;
         iUserAccessor userAccessor;
 
-        public ComponentLikeAction(DataContext context, iUserAccessor accessor)
+        public LibraryItemLikeAction(DataContext context, iUserAccessor accessor)
         {
             db = context ?? throw new ArgumentNullException(nameof(context));
             userAccessor = accessor;
         }
 
-        public void Process(Component source, DetailedComponentDTO destination, ResolutionContext context)
+        public void Process(Library source, LibraryDTO destination, ResolutionContext context)
         {
             var id = userAccessor.GetId();
             destination.Likes = db.Likes.Where(x => x.ElementId == destination.Id).Count();
             destination.Liked = db.Likes.Where(x => x.ElementId == destination.Id && x.UserId == id).Count() > 0;
-            destination.Owned = db.OwnedComponents.Any(x => x.UserId == id && x.ComponentId == destination.Id);
-
         }
     }
 }
