@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Persistence;
 using System;
 using System.Collections.Generic;

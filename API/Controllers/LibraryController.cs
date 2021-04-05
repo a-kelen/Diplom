@@ -46,6 +46,13 @@ namespace API.Controllers
         {
             return await Mediator.Send(new LikedList.Query());
         }
+        [HttpGet("avatar/{id}")]
+        public async Task<FileContentResult> GetLibraryAvatar(Guid id)
+        {
+
+            var result = await Mediator.Send(new GetLibraryAvatar.Query { LibraryId = id });
+            return File(result, "image/jpeg");
+        }
 
 
         //POST
@@ -60,6 +67,7 @@ namespace API.Controllers
         {
             return await Mediator.Send(command);
         }
+
         [HttpPost("get-own")]
         public async Task<ActionResult<LibraryDTO>> GetOWn(ToOwnLibrary.Command command)
         {
@@ -70,6 +78,12 @@ namespace API.Controllers
         // PUT
         [HttpPut]
         public async Task<ActionResult<LibraryDTO>> UpdateLibrary(Edit.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("avatar")]
+        public async Task<ActionResult<bool>> UpdateAvatar([FromForm]UpdateLibraryAvatar.Command command)
         {
             return await Mediator.Send(command);
         }

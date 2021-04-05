@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace API.Controllers
 {
     [Route("api/[controller]")]
@@ -49,6 +50,13 @@ namespace API.Controllers
         public async Task<ActionResult<bool>> SwitchFollow(SwitchFollowUser.Command command)
         {
             return await Mediator.Send(command);
+        }
+
+        [HttpGet("avatar/{username}")]
+        public async Task<FileContentResult> GetUserAvatar(string username)
+        { 
+            var result = await Mediator.Send(new GetAvatar.Query { Username = username });
+            return File(result, "image/jpeg");
         }
 
 

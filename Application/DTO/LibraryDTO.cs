@@ -12,6 +12,7 @@ namespace Application.DTO
         public string Name { get; set; }
         public string Author { get; set; }
         public string Status { get; set; }
+        public bool HasAvatar { get; set; }
         public DateTime Created { get; set; }
         public int ComponentsCount { get; set; }
     }

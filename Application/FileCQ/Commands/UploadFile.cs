@@ -40,11 +40,11 @@ namespace Application.FileCQ.Commands
             DataContext db;
             iUserAccessor userAccessor;
             IMapper mapper;
-            IHostingEnvironment environment;
+            IWebHostEnvironment environment;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccessor
                            , IMapper mapper
-                           , IHostingEnvironment appEnvironment)
+                           , IWebHostEnvironment appEnvironment)
             {
                 this.db = dataContext;
                 this.userAccessor = userAccessor;

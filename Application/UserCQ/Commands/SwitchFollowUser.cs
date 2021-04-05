@@ -50,6 +50,8 @@ namespace Application.UserCQ.Commands
 
                 if (person == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
+                if(person.Id == userId)
+                    throw new RestException(HttpStatusCode.NotFound, new { Operation = "Denied" });
 
                 var follower = await db.Followers.FirstOrDefaultAsync(x => x.UserId == userId && x.PersonId == person.Id);
                 bool result = false;
