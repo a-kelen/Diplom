@@ -16,6 +16,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : BaseConttoller
     {
         [HttpGet]
@@ -31,6 +32,20 @@ namespace API.Controllers
         {
             return await Mediator.Send(new Get.Query { Username = username});
         }
+
+        [HttpGet("avatar/{username}")]
+        public async Task<FileContentResult> GetUserAvatar(string username)
+        {
+            var result = await Mediator.Send(new GetAvatar.Query { Username = username });
+            return File(result, "image/jpeg");
+        }
+
+        [HttpGet("topList")]
+        public async Task<ActionResult<List<UserDTO>>> Top()
+        {
+            return await Mediator.Send(new TopList.Query());
+        }
+
 
         [AllowAnonymous]
         [HttpPost("login")]
@@ -58,13 +73,7 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpGet("avatar/{username}")]
-        public async Task<FileContentResult> GetUserAvatar(string username)
-        { 
-            var result = await Mediator.Send(new GetAvatar.Query { Username = username });
-            return File(result, "image/jpeg");
-        }
-
+        
 
 
 

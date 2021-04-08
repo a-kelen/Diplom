@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
@@ -14,16 +15,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ComponentCQ.Queries
+namespace Application.LibraryCQ.Queries
 {
-    public class LikedList
+    public class TopList
     {
-        public class Query : IRequest<List<ComponentDTO>>
+        public class Query : IRequest<List<LibraryDTO>>
         {
 
         }
-       
-        public class Handler : IRequestHandler<Query, List<ComponentDTO>>
+
+        public class Handler : IRequestHandler<Query, List<LibraryDTO>>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -37,17 +38,19 @@ namespace Application.ComponentCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<List<ComponentDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<LibraryDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var id = userAccesor.GetId();
+                var ids = db.Likes.Where(x => x.Descriminator == LikeDescriminator.Library)
+                    .GroupBy(x => x.ElementId)
+                    .OrderByDescending(x => x.Count())
+                    .Take(50)
+                    .Select(x => x.Key);
 
-                var ids = db.Likes.Where(x => x.Descriminator == LikeDescriminator.Component && x.UserId == id)
-                    .Select(x => x.ElementId);
-                var res = db.Components
+                var res = db.Libraries
                     .Where(x => ids.Contains(x.Id))
-                    .ToList();
+                    .ToListAsync();
 
-                return mapper.Map <List<Component>, List<ComponentDTO>> (res);
+                return mapper.Map<List<Library>, List<LibraryDTO>>(res);
             }
         }
     }

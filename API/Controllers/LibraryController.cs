@@ -46,6 +46,13 @@ namespace API.Controllers
         {
             return await Mediator.Send(new LikedList.Query());
         }
+
+        [HttpGet("topList")]
+        public async Task<ActionResult<List<LibraryDTO>>> Top()
+        {
+            return await Mediator.Send(new TopList.Query());
+        }
+
         [HttpGet("avatar/{id}")]
         public async Task<FileContentResult> GetLibraryAvatar(Guid id)
         {

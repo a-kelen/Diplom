@@ -1,7 +1,6 @@
 ﻿using Application.ComponentCQ.Commands;
 using Application.ComponentCQ.Queries;
 using Application.DTO;
-using Application.UserCQ.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +37,12 @@ namespace API.Controllers
         public async Task<ActionResult<List<ComponentDTO>>> GetLikedLibraries()
         {
             return await Mediator.Send(new LikedList.Query());
+        }
+
+        [HttpGet("topList")]
+        public async Task<ActionResult<List<ComponentDTO>>> Top()
+        {
+            return await Mediator.Send(new TopList.Query());
         }
 
         [HttpGet("download/{id}")]

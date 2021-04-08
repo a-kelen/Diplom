@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.UserCQ.Queries
+namespace Application.ComponentCQ.Queries
 {
     public class OwnList
     {

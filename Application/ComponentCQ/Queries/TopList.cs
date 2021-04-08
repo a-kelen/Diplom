@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,13 @@ using System.Threading.Tasks;
 
 namespace Application.ComponentCQ.Queries
 {
-    public class LikedList
+    public class TopList
     {
         public class Query : IRequest<List<ComponentDTO>>
         {
 
         }
-       
+        
         public class Handler : IRequestHandler<Query, List<ComponentDTO>>
         {
             DataContext db;
@@ -39,15 +40,17 @@ namespace Application.ComponentCQ.Queries
 
             public async Task<List<ComponentDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var id = userAccesor.GetId();
+                var ids = db.Likes.Where(x => x.Descriminator == LikeDescriminator.Component)
+                    .GroupBy(x => x.ElementId)
+                    .OrderByDescending(x => x.Count())
+                    .Take(50)
+                    .Select(x => x.Key);
 
-                var ids = db.Likes.Where(x => x.Descriminator == LikeDescriminator.Component && x.UserId == id)
-                    .Select(x => x.ElementId);
                 var res = db.Components
                     .Where(x => ids.Contains(x.Id))
-                    .ToList();
+                    .ToListAsync();
 
-                return mapper.Map <List<Component>, List<ComponentDTO>> (res);
+                return mapper.Map <List<Component>, List<ComponentDTO>>(res);
             }
         }
     }

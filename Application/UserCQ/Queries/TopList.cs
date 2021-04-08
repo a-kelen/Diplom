@@ -17,20 +17,20 @@ using System.Threading.Tasks;
 
 namespace Application.UserCQ.Queries
 {
-    public class Get
+    public class TopList
     {
-        public class Query : IRequest<DetailedUserDTO>
+        public class Query : IRequest<List<UserDTO>>
         {
-            public string Username { get; set; }
+
         }
         public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {
-                RuleFor(x => x.Username).NotEmpty();
+
             }
         }
-        public class Handler : IRequestHandler<Query, DetailedUserDTO>
+        public class Handler : IRequestHandler<Query, List<UserDTO>>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -44,19 +44,16 @@ namespace Application.UserCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<DetailedUserDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<UserDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = db.Users
-                    .Include(x => x.Components)
-                    .Include(x => x.Libraries)
+                var res = await db.Users
                     .Include(x => x.Followers)
-                    .Include(x => x.Follows)
-                    .FirstOrDefault(x => x.UserName == request.Username);
+                    .Include(x => x.Libraries)
+                    .Include(x => x.Components)
+                    .OrderByDescending(x => x.Followers.Count * (x.Components.Count + x.Libraries.Count))
+                    .Take(50).ToListAsync();
 
-                if (user == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
-
-                return mapper.Map <User, DetailedUserDTO> (user);
+                return mapper.Map <List<User>, List<UserDTO>>(res);
             }
         }
     }
