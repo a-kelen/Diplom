@@ -49,17 +49,17 @@ namespace Application.LibraryCQ.Queries
             public async Task<DetailedLibraryDTO> Handle(Query request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
-                var res = db.Libraries
+                var library = db.Libraries
                     .Include(x => x.Components)
                     .Include(x => x.Owner)
                     .FirstOrDefault(x => x.Name == request.Name && x.Owner.UserName == request.Author);
 
-                if (res == null)
+                if (library == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
-                if (res.Deleted && res.UserId != userId)
+                if ( (library.Deleted || library.Status == true) && library.UserId != userId)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
 
-                return mapper.Map<Library, DetailedLibraryDTO>(res);
+                return mapper.Map<Library, DetailedLibraryDTO>(library);
             }
         }
     }

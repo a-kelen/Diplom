@@ -74,6 +74,12 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("report")]
+        public async Task<ActionResult<bool>> Report(ReportToLibrary.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
 
         // PUT
         [HttpPut]

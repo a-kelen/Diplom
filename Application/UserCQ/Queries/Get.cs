@@ -49,6 +49,8 @@ namespace Application.UserCQ.Queries
                 var user = db.Users
                     .Include(x => x.Components)
                     .Include(x => x.Libraries)
+                    .Include(x => x.Followers)
+                    .Include(x => x.Follows)
                     .FirstOrDefault(x => x.UserName == request.Username);
 
                 if (user == null)

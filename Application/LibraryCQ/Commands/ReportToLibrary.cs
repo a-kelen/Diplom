@@ -1,7 +1,5 @@
-﻿using Application.DTO;
-using Application.Exceptions;
+﻿using Application.Exceptions;
 using Application.Interfaces;
-using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -14,55 +12,50 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ComponentCQ.Commands
+namespace Application.LibraryCQ.Commands
 {
-    public class ComponentLike
+    public class ReportToLibrary
     {
         public class Command : IRequest<bool>
         {
             public Guid Id { get; set; }
+            public string Content { get; set; }
+
         }
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                RuleFor(x => x.Id).NotNull();
+                RuleFor(x => x.Content).NotEmpty();
             }
         }
         public class Handler : IRequestHandler<Command, bool>
         {
             DataContext db;
             iUserAccessor userAccessor;
-            IMapper mapper;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccessor
-                           , IMapper mapper)
+                            )
             {
                 this.db = dataContext;
                 this.userAccessor = userAccessor;
-                this.mapper = mapper;
             }
 
             public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
-                var component = await db.Components.FirstOrDefaultAsync(x => x.Id == request.Id);
-                var like = await db.Likes.FirstOrDefaultAsync(x => x.UserId == userId && x.ElementId == request.Id);
+                Library library = await db.Libraries.FirstOrDefaultAsync(x => x.Id == request.Id);
+                if (library == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
 
-                if (component == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { Component = "Not found" });
-
-                if (like == null)
+                LibraryReport report = new LibraryReport
                 {
-                    var l = new Like { UserId = userId, ElementId = component.Id, Descriminator = LikeDescriminator.Component };
-                    await db.Likes.AddAsync(l);
-                }
-                else
-                {
-                    db.Likes.Remove(like);
-                }
-                await db.SaveChangesAsync();
-                return like == null;
+                    UserId = userId,
+                    LibraryId = library.Id,
+                    Content = request.Content
+                };
+                await db.LibraryReports.AddAsync(report);
+                return await db.SaveChangesAsync() > 0;
             }
         }
     }

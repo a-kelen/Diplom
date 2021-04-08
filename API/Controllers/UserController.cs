@@ -52,6 +52,12 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("report")]
+        public async Task<ActionResult<bool>> Report(ReportToUser.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
         [HttpGet("avatar/{username}")]
         public async Task<FileContentResult> GetUserAvatar(string username)
         { 

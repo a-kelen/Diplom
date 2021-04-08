@@ -38,6 +38,15 @@ namespace Persistence
             builder.Entity<Follower>()
                 .Property(b => b.Created)
                 .HasDefaultValueSql("getdate()");
+            builder.Entity<UserReport>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
+            builder.Entity<LibraryReport>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
+            builder.Entity<ComponentReport>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
         }
         static void userRelationships()
         {
@@ -57,12 +66,14 @@ namespace Persistence
                 .WithOne(g => g.User)
                 .HasForeignKey(g => g.UserId);
 
-            builder.Entity<User>().HasMany(t => t.Followers)
+            builder.Entity<User>().HasMany(t => t.Follows)
                 .WithOne(g => g.User)
                 .HasForeignKey(g => g.UserId);
-            builder.Entity<User>().HasMany(t => t.Follows)
+
+            builder.Entity<User>().HasMany(t => t.Followers)
                 .WithOne(g => g.Person)
                 .HasForeignKey(g => g.PersonId).OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<User>().HasMany(t => t.UserReports)
                 .WithOne(g => g.Person)
                 .HasForeignKey(g => g.PersonId).OnDelete(DeleteBehavior.Restrict);
