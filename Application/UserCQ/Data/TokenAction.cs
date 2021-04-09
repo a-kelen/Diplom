@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Application.UserCQ.Data
 {
-    public class TokenAction : IMappingAction<User, UserDTO>
+    public class TokenAction : IMappingAction<User, CurrentUserDTO>
     {
         iJWTGenerator jwtGenerator;
 
@@ -18,7 +18,7 @@ namespace Application.UserCQ.Data
             this.jwtGenerator = _jwtGenerator;
         }
 
-        public void Process(User source, UserDTO destination, ResolutionContext context)
+        public void Process(User source, CurrentUserDTO destination, ResolutionContext context)
         {
             destination.Token = jwtGenerator.CreateToken(source);
         }

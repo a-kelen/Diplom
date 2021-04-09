@@ -4,15 +4,13 @@ using System.Text;
 
 namespace Application.DTO
 {
-    public class UserDTO
+    public class CurrentUserDTO
     {
         public string Name { get; set; }
+        public string Token { get; set; }
         public string Email { get; set; }
         public string Image { get; set; }
         public string Username { get; set; }
-        public int LibraryCount{ get; set; }
-        public int FollowerCount { get; set; }
-        public int ComponentCount { get; set; }
 
     }
 }

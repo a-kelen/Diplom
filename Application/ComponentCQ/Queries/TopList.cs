@@ -47,6 +47,7 @@ namespace Application.ComponentCQ.Queries
                     .Select(x => x.Key);
 
                 var res = await db.Components
+                    .Include(x => x.Owner)
                     .Where(x => ids.Contains(x.Id))
                     .ToListAsync();
 

@@ -48,8 +48,8 @@ namespace Application.UserCQ.Queries
             {
                 var res = await db.Users
                     .Include(x => x.Followers)
-                    .Include(x => x.Libraries)
-                    .Include(x => x.Components)
+                    .Include(x => x.Libraries.Where(x => x.Status == true))
+                    .Include(x => x.Components.Where(x => x.Status == true))
                     .OrderByDescending(x => x.Followers.Count * (x.Components.Count + x.Libraries.Count))
                     .Take(50).ToListAsync();
 

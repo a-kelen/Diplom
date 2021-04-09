@@ -47,6 +47,7 @@ namespace Application.LibraryCQ.Queries
                     .Select(x => x.Key);
 
                 var res = await db.Libraries
+                    .Include(x => x.Owner)
                     .Where(x => ids.Contains(x.Id))
                     .ToListAsync();
 
