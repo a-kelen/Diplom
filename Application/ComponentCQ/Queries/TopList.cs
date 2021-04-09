@@ -46,7 +46,7 @@ namespace Application.ComponentCQ.Queries
                     .Take(50)
                     .Select(x => x.Key);
 
-                var res = db.Components
+                var res = await db.Components
                     .Where(x => ids.Contains(x.Id))
                     .ToListAsync();
 

@@ -23,6 +23,7 @@ namespace Persistence
         public DbSet<Like> Likes { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Prop> Props { get; set; }
+        public DbSet<Slot> Slots { get; set; }
 
         public DataContext(DbContextOptions options) : base(options)
         {

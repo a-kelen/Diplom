@@ -49,6 +49,7 @@ namespace Application.ComponentCQ.Queries
                     .Include(x => x.Library).ThenInclude(x => x.Owner)
                     .Include(x => x.Events)
                     .Include(x => x.Props)
+                    .Include(x => x.Slots)
                     .FirstOrDefault(x => x.Id == request.Id);
 
                 return mapper.Map<Component, DetailedComponentDTO>(res);

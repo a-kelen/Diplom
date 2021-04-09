@@ -23,6 +23,7 @@ namespace Application.ComponentCQ.Data
                 .ForMember(d => d.Library, o => o.MapFrom(r => r.Library))
                 .ForMember(d => d.Events, o => o.MapFrom(r => r.Events))
                 .ForMember(d => d.Props, o => o.MapFrom(r => r.Props))
+                .ForMember(d => d.Slots, o => o.MapFrom(r => r.Slots))
                 .ForMember(d => d.Description, o => o.MapFrom(r => r.Description ?? ""))
                 .AfterMap<ComponentLikeAction>();
 
@@ -30,9 +31,11 @@ namespace Application.ComponentCQ.Data
 
             CreateMap<PropVM, Prop>();
             CreateMap<EventVM, Event>();
+            CreateMap<SlotVM, Slot>();
 
             CreateMap<Prop, PropDTO>();
             CreateMap<Event, EventDTO>();
+            CreateMap<Slot, SlotDTO>();
         }
     }
 }

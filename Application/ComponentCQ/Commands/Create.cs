@@ -24,6 +24,7 @@ namespace Application.ComponentCQ.Commands
             public bool Status { get; set; }
             public List<EventVM> Events { get; set; }
             public List<PropVM> Props { get; set; }
+            public List<SlotVM> Slots { get; set; }
 
         }
         public class Validator : AbstractValidator<Command>
@@ -50,6 +51,7 @@ namespace Application.ComponentCQ.Commands
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
             {
                 Component component = mapper.Map<Command, Component>(request);
+
                 component.UserId = userAccessor.GetId();
 
                 var res = await db.Components.AddAsync(component);

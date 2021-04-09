@@ -11,5 +11,6 @@ namespace Application.ViewModel
         public string Description { get; set; }
         public List<PropVM> Props { get; set; }
         public List<EventVM> Events { get; set; }
+        public List<SlotVM> Slots { get; set; }
     }
 }

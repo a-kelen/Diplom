@@ -18,5 +18,6 @@ namespace Application.DTO
         public string Description { get; set; }
         public List<PropDTO> Props { get; set; }
         public List<EventDTO> Events { get; set; }
+        public List<SlotDTO> Slots { get; set; }
     }
 }
