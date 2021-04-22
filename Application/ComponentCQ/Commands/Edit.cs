@@ -23,6 +23,7 @@ namespace Application.ComponentCQ.Commands
         {
             public Guid Id { get; set; }
             public string Description { get; set; }
+            public string Dependencies { get; set; }
             public List<EventVM> Events { get; set; }
             public List<PropVM> Props { get; set; }
 

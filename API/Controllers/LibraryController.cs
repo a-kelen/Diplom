@@ -29,6 +29,12 @@ namespace API.Controllers
             return await Mediator.Send(new OwnedList.Query());
         }
 
+        [HttpGet("search/{searchQuery}")]
+        public async Task<ActionResult<List<LibraryDTO>>> SearchLibrary(string searchQuery)
+        {
+            return await Mediator.Send(new SearchLibraries.Query { SearchQuery = searchQuery });
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<DetailedLibraryDTO>> GetLibrary(Guid id)
         {

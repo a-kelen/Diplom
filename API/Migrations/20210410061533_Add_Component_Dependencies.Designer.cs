@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210410061533_Add_Component_Dependencies")]
+    partial class Add_Component_Dependencies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,15 +429,15 @@ namespace API.Migrations
                         {
                             Id = new Guid("d2429acd-e887-47f8-8ad2-6502e05c9068"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "38bb0560-38dd-4593-adbd-867f7599e02f",
-                            Created = new DateTime(2021, 4, 22, 20, 57, 59, 211, DateTimeKind.Local).AddTicks(3569),
+                            ConcurrencyStamp = "82440f1a-3644-410d-8e8c-ff907472cd89",
+                            Created = new DateTime(2021, 4, 10, 9, 15, 33, 282, DateTimeKind.Local).AddTicks(9955),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Admin",
                             Lastname = "Adminenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAOJE62DAwTj+6CmP6mfcEe8ySkkgx1NiEmR3UF18ykDIRs47wUTUoHpHhhavblpOg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMHcotrq8ia+TzQa5WRAg4C+OtPSkyC+hTc2HnTSCteGk3K2U5N0+q24BwA6uGMXrg==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin"
@@ -444,15 +446,15 @@ namespace API.Migrations
                         {
                             Id = new Guid("d350afff-86b3-449b-be6c-e87394d5a629"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ec66a13c-d78e-4ee3-837c-214065828b94",
-                            Created = new DateTime(2021, 4, 22, 20, 57, 59, 220, DateTimeKind.Local).AddTicks(429),
+                            ConcurrencyStamp = "f4c8ded8-4072-4410-8e95-3fbf625c92a6",
+                            Created = new DateTime(2021, 4, 10, 9, 15, 33, 287, DateTimeKind.Local).AddTicks(7058),
                             Email = "user1@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "User1",
                             Lastname = "Userenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHXoK6fKi1yco5HfW/S+O6pD6shy9C0eGBUYd0yEzpL8NIPy1bmdXLY0hNJ+I5jEvQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECShwV9XuC52gAJiRZ8u5/pbtpddxZARJc3+49VuQ/+U/qNw5lXZJPBMXpZrywkGjw==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "user1"

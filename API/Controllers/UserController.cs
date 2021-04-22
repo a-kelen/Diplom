@@ -20,17 +20,22 @@ namespace API.Controllers
     public class UserController : BaseConttoller
     {
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<UserDTO>> CurrentUser()
         {
             return await Mediator.Send(new Current.Query());
         }
 
         [HttpGet("{username}")]
-        [Authorize]
         public async Task<ActionResult<DetailedUserDTO>> GetUser(string username)
         {
             return await Mediator.Send(new Get.Query { Username = username});
+        }
+
+        [HttpGet("search/{searchQuery}")]
+       
+        public async Task<ActionResult<List<UserDTO>>> SearchUser(string searchQuery)
+        {
+            return await Mediator.Send(new SearchUsers.Query { SearchQuery = searchQuery });
         }
 
         [HttpGet("avatar/{username}")]

@@ -33,6 +33,12 @@ namespace API.Controllers
             return await Mediator.Send(new GetById.Query { Id = id });
         }
 
+        [HttpGet("search/{searchQuery}")]
+        public async Task<ActionResult<List<ComponentDTO>>> SearchComponent(string searchQuery)
+        {
+            return await Mediator.Send(new SearchComponents.Query { SearchQuery = searchQuery });
+        }
+
         [HttpGet("liked")]
         public async Task<ActionResult<List<ComponentDTO>>> GetLikedLibraries()
         {

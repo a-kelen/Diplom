@@ -20,11 +20,13 @@ namespace Application.ComponentCQ.Commands
     {
         public class Command : IRequest<ComponentDTO>
         {
-            public string Description { get; set;}
             public bool Status { get; set; }
-            public List<EventVM> Events { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set;}
+            public string Dependencies { get; set; }
             public List<PropVM> Props { get; set; }
             public List<SlotVM> Slots { get; set; }
+            public List<EventVM> Events { get; set; }
 
         }
         public class Validator : AbstractValidator<Command>

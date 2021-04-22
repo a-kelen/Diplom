@@ -16,8 +16,9 @@ namespace Application.DTO
         public string Status { get; set; }
         public LibraryDTO Library { get; set; }
         public string Description { get; set; }
+        public string Dependencies { get; set; }
         public List<PropDTO> Props { get; set; }
-        public List<EventDTO> Events { get; set; }
         public List<SlotDTO> Slots { get; set; }
+        public List<EventDTO> Events { get; set; }
     }
 }

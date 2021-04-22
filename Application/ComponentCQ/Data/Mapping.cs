@@ -25,6 +25,7 @@ namespace Application.ComponentCQ.Data
                 .ForMember(d => d.Props, o => o.MapFrom(r => r.Props))
                 .ForMember(d => d.Slots, o => o.MapFrom(r => r.Slots))
                 .ForMember(d => d.Description, o => o.MapFrom(r => r.Description ?? ""))
+                .ForMember(d => d.Dependencies, o => o.MapFrom(r => r.Dependencies ?? ""))
                 .AfterMap<ComponentLikeAction>();
 
             CreateMap<Commands.Create.Command, Component>();
