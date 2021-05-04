@@ -11,5 +11,6 @@ namespace Domain.Entities
         public string Content { get; set; }
         public Guid ComponentId { get; set; }
         public Component Component { get; set; }
+        public ReportStatus Status { get; set; }
     }
 }

@@ -72,11 +72,19 @@ namespace Persistence
 
             builder.Entity<User>().HasMany(t => t.Followers)
                 .WithOne(g => g.Person)
-                .HasForeignKey(g => g.PersonId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(g => g.PersonId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<User>().HasMany(t => t.UserReports)
                 .WithOne(g => g.Person)
-                .HasForeignKey(g => g.PersonId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(g => g.PersonId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>().HasOne(t => t.Block)
+                .WithOne(g => g.Person)
+                .HasForeignKey<UserBlock>(k => k.PersonId)
+                .OnDelete(DeleteBehavior.Restrict); ;
+                
         }
         static void componentRelationships()
         {
@@ -86,7 +94,8 @@ namespace Persistence
 
             builder.Entity<Component>().HasMany(t => t.Owned)
                 .WithOne(t => t.Component)
-                .HasForeignKey(x => x.ComponentId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(x => x.ComponentId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Component>().HasMany(t => t.Props)
                 .WithOne(g => g.Component)
@@ -102,21 +111,35 @@ namespace Persistence
 
             builder.Entity<Component>().HasMany(t => t.Reports)
                 .WithOne(g => g.Component)
-                .HasForeignKey(g => g.ComponentId).OnDelete(DeleteBehavior.Restrict); ;
+                .HasForeignKey(g => g.ComponentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Component>().HasOne(t => t.Block)
+                .WithOne(g => g.Component)
+                .HasForeignKey<ComponentBlock>(k => k.ComponentId)
+                .OnDelete(DeleteBehavior.Restrict); ;
         }
         static void libraryRelationships()
         {
             builder.Entity<Library>().HasMany(t => t.Components)
                 .WithOne(g => g.Library)
-                .HasForeignKey(g => g.LibraryId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(g => g.LibraryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Library>().HasMany(t => t.Owned)
                 .WithOne(t => t.Library)
-                .HasForeignKey(x => x.LibraryId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(x => x.LibraryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Library>().HasMany(t => t.Reports)
                 .WithOne(t => t.Library)
-                .HasForeignKey(x => x.LibraryId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(x => x.LibraryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Library>().HasOne(t => t.Block)
+                .WithOne(g => g.Library)
+                .HasForeignKey<LibraryBlock>(k => k.LibraryId)
+                .OnDelete(DeleteBehavior.Restrict); ;
         }
 
     }

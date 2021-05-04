@@ -20,7 +20,7 @@ namespace API.Controllers
     public class UserController : BaseConttoller
     {
         [HttpGet]
-        public async Task<ActionResult<UserDTO>> CurrentUser()
+        public async Task<ActionResult<CurrentUserDTO>> CurrentUser()
         {
             return await Mediator.Send(new Current.Query());
         }
@@ -54,7 +54,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login(Login.Command query)
+        public async Task<ActionResult<CurrentUserDTO>> Login(Login.Command query)
         {
             return await Mediator.Send(query);
         }

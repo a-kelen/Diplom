@@ -9,13 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class DataContext : IdentityDbContext<User, Role, Guid>
     {
         public DbSet<ComponentReport> ComponentReports { get; set; }
+        public DbSet<ComponentBlock> ComponentBlocks { get; set; }
         public DbSet<OwnedComponent> OwnedComponents { get; set; }
         public DbSet<LibraryReport> LibraryReports { get; set; }
         public DbSet<OwnedLibrary> OwnedLibraries { get; set; }
+        public DbSet<LibraryBlock> LibraryBlocks { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
+        public DbSet<UserBlock> UserBlocks { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<Follower>  Followers{ get; set; }
         public DbSet<Library> Libraries { get; set; }
@@ -24,6 +27,7 @@ namespace Persistence
         public DbSet<File> Files { get; set; }
         public DbSet<Prop> Props { get; set; }
         public DbSet<Slot> Slots { get; set; }
+
 
         public DataContext(DbContextOptions options) : base(options)
         {

@@ -13,12 +13,12 @@ namespace Application.ComponentCQ.Data
         public Mapping()
         {
             CreateMap<Component, ComponentDTO>()
-                .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
+                .ForMember(d => d.Status, o => o.MapFrom(r => r.Status ? "Public" : "Private"))
                 .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
                 .AfterMap<ComponentItemLikeAction>();
 
             CreateMap<Component, DetailedComponentDTO>()
-                .ForMember(d => d.Status, o => o.MapFrom(r => !r.Status ? "Public" : "Private"))
+                .ForMember(d => d.Status, o => o.MapFrom(r => r.Status ? "Public" : "Private"))
                 .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName != null ? r.Owner.UserName : r.Library.Owner.UserName))
                 .ForMember(d => d.Library, o => o.MapFrom(r => r.Library))
                 .ForMember(d => d.Events, o => o.MapFrom(r => r.Events))

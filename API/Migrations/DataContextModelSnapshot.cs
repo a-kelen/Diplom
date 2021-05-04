@@ -25,6 +25,9 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BlockId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -63,6 +66,28 @@ namespace API.Migrations
                     b.ToTable("Components");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ComponentBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ComponentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ComponentBlocks");
+                });
+
             modelBuilder.Entity("Domain.Entities.ComponentReport", b =>
                 {
                     b.Property<Guid>("Id")
@@ -79,6 +104,9 @@ namespace API.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -168,6 +196,9 @@ namespace API.Migrations
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("BlockId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -198,6 +229,28 @@ namespace API.Migrations
                     b.ToTable("Libraries");
                 });
 
+            modelBuilder.Entity("Domain.Entities.LibraryBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LibraryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LibraryId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LibraryBlocks");
+                });
+
             modelBuilder.Entity("Domain.Entities.LibraryReport", b =>
                 {
                     b.Property<Guid>("Id")
@@ -214,6 +267,9 @@ namespace API.Migrations
 
                     b.Property<Guid>("LibraryId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -321,6 +377,39 @@ namespace API.Migrations
                     b.ToTable("Props");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetRoles");
+                });
+
             modelBuilder.Entity("Domain.Entities.Slot", b =>
                 {
                     b.Property<Guid>("Id")
@@ -354,6 +443,9 @@ namespace API.Migrations
 
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("BlockId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -427,15 +519,16 @@ namespace API.Migrations
                         {
                             Id = new Guid("d2429acd-e887-47f8-8ad2-6502e05c9068"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "38bb0560-38dd-4593-adbd-867f7599e02f",
-                            Created = new DateTime(2021, 4, 22, 20, 57, 59, 211, DateTimeKind.Local).AddTicks(3569),
+                            BlockId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ConcurrencyStamp = "90c25fcc-ba9d-4074-a5c0-90adc22b1b90",
+                            Created = new DateTime(2021, 5, 4, 12, 55, 9, 756, DateTimeKind.Local).AddTicks(6139),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Admin",
                             Lastname = "Adminenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAOJE62DAwTj+6CmP6mfcEe8ySkkgx1NiEmR3UF18ykDIRs47wUTUoHpHhhavblpOg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ1dmXCRq5MTmRwu7OTSI1kQSd/ddAHaGBFiOeTNtcZC/02hT4hsnYI5TbGqvXqm9A==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin"
@@ -444,19 +537,42 @@ namespace API.Migrations
                         {
                             Id = new Guid("d350afff-86b3-449b-be6c-e87394d5a629"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ec66a13c-d78e-4ee3-837c-214065828b94",
-                            Created = new DateTime(2021, 4, 22, 20, 57, 59, 220, DateTimeKind.Local).AddTicks(429),
+                            BlockId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ConcurrencyStamp = "7804a8f2-f1f3-4078-940c-274609dacce4",
+                            Created = new DateTime(2021, 5, 4, 12, 55, 9, 761, DateTimeKind.Local).AddTicks(3022),
                             Email = "user1@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "User1",
                             Lastname = "Userenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHXoK6fKi1yco5HfW/S+O6pD6shy9C0eGBUYd0yEzpL8NIPy1bmdXLY0hNJ+I5jEvQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKujN3A371GwrP2wSggpMvhq+d8gpVZ0gBA9sSaULvqxuI2dICk/cjZQTeezU4SGHg==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "user1"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserBlocks");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserReport", b =>
@@ -476,6 +592,9 @@ namespace API.Migrations
                     b.Property<Guid>("PersonId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -486,34 +605,6 @@ namespace API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserReports");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -633,6 +724,25 @@ namespace API.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ComponentBlock", b =>
+                {
+                    b.HasOne("Domain.Entities.Component", "Component")
+                        .WithOne("Block")
+                        .HasForeignKey("Domain.Entities.ComponentBlock", "ComponentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Component");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.ComponentReport", b =>
                 {
                     b.HasOne("Domain.Entities.Component", "Component")
@@ -704,6 +814,25 @@ namespace API.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("Domain.Entities.LibraryBlock", b =>
+                {
+                    b.HasOne("Domain.Entities.Library", "Library")
+                        .WithOne("Block")
+                        .HasForeignKey("Domain.Entities.LibraryBlock", "LibraryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Library");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.LibraryReport", b =>
                 {
                     b.HasOne("Domain.Entities.Library", "Library")
@@ -772,6 +901,13 @@ namespace API.Migrations
                     b.Navigation("Component");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Role", b =>
+                {
+                    b.HasOne("Domain.Entities.User", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Domain.Entities.Slot", b =>
                 {
                     b.HasOne("Domain.Entities.Component", "Component")
@@ -781,6 +917,25 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("Component");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserBlock", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Person")
+                        .WithOne("Block")
+                        .HasForeignKey("Domain.Entities.UserBlock", "PersonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserReport", b =>
@@ -804,7 +959,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    b.HasOne("Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -831,7 +986,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    b.HasOne("Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -855,6 +1010,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("Domain.Entities.Component", b =>
                 {
+                    b.Navigation("Block");
+
                     b.Navigation("Events");
 
                     b.Navigation("Files");
@@ -870,6 +1027,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("Domain.Entities.Library", b =>
                 {
+                    b.Navigation("Block");
+
                     b.Navigation("Components");
 
                     b.Navigation("Owned");
@@ -879,6 +1038,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
+                    b.Navigation("Block");
+
                     b.Navigation("Components");
 
                     b.Navigation("Followers");
@@ -890,6 +1051,8 @@ namespace API.Migrations
                     b.Navigation("OwnedComponents");
 
                     b.Navigation("OwnedLibraries");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("UserReports");
                 });

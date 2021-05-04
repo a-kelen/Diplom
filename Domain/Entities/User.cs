@@ -13,6 +13,8 @@ namespace Domain.Entities
         public string Lastname { get; set; }
         public string Firstname { get; set;}
         public DateTime Created { get; set; }
+        public Guid BlockId { get; set; }
+        public UserBlock Block { get; set; }
 
         public List<Follower> Follows { get; set; }
         public List<Library> Libraries { get; set; }
@@ -21,5 +23,6 @@ namespace Domain.Entities
         public List<OwnedLibrary> OwnedLibraries { get; set; }
         public List<OwnedComponent> OwnedComponents { get; set; }
         public List<UserReport> UserReports { get; set; }
+        public List<Role> Roles { get; set; }
     }
 }

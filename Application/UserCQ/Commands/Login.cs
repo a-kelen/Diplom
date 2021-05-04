@@ -17,7 +17,7 @@ namespace Application.UserCQ.Commands
 {
     public class Login
     {
-        public class Command : IRequest<UserDTO>
+        public class Command : IRequest<CurrentUserDTO>
         {
             public string Email { get; set; }
             public string Password { get; set; }
@@ -32,7 +32,7 @@ namespace Application.UserCQ.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Command, UserDTO>
+        public class Handler : IRequestHandler<Command, CurrentUserDTO>
         {
             private readonly UserManager<User> _userManager;
             private readonly SignInManager<User> _signInManager;
@@ -44,7 +44,7 @@ namespace Application.UserCQ.Commands
                 this._userManager = userManager;
             }
 
-            public async Task<UserDTO> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<CurrentUserDTO> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -56,7 +56,7 @@ namespace Application.UserCQ.Commands
 
                 if (result.Succeeded)
                 {
-                    return mapper.Map<User, UserDTO>(user);
+                    return mapper.Map<User, CurrentUserDTO>(user);
                 }
 
                 throw new RestException(HttpStatusCode.Unauthorized, null);

@@ -22,6 +22,7 @@ namespace Application.ComponentCQ.Commands
         public class Command : IRequest<ComponentDTO>
         {
             public Guid Id { get; set; }
+            public bool Status { get; set; }
             public string Description { get; set; }
             public string Dependencies { get; set; }
             public List<EventVM> Events { get; set; }

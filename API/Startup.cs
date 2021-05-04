@@ -65,12 +65,22 @@ namespace API
 
             var builder = services.AddIdentityCore<User>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            identityBuilder.AddRoles<Role>();
             identityBuilder.AddEntityFrameworkStores<DataContext>();
+
             identityBuilder.AddSignInManager<SignInManager<User>>();
+            services.AddAuthorizationCore();
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(opt =>
                 {
+                    opt.RequireHttpsMetadata = false;
+                    opt.SaveToken = true;
                     opt.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,

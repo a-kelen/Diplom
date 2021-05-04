@@ -14,6 +14,8 @@ namespace Domain.Entities
         public bool Deleted { get; set; }
         public string Avatar { get; set; }
         public string Description { get; set; }
+        public Guid BlockId { get; set; }
+        public LibraryBlock Block { get; set; }
 
         public List<OwnedLibrary> Owned { get; set; }
         public List<Component> Components { get; set; }

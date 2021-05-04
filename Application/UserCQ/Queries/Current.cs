@@ -17,11 +17,11 @@ namespace Application.UserCQ.Queries
 {
     public class Current
     {
-        public class Query : IRequest<UserDTO>
+        public class Query : IRequest<CurrentUserDTO>
         {
 
         }
-        public class Handler : IRequestHandler<Query, UserDTO>
+        public class Handler : IRequestHandler<Query, CurrentUserDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -38,13 +38,13 @@ namespace Application.UserCQ.Queries
                 this._jwtGenerator = jwtGenerator;
             }
 
-            public async Task<UserDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<CurrentUserDTO> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = userAccesor.GetUser();
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
                 
-                return mapper.Map<User, UserDTO>(user);
+                return mapper.Map<User, CurrentUserDTO>(user);
             }
         }
     }

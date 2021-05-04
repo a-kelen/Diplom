@@ -23,6 +23,7 @@ namespace Application.LibraryCQ.Commands
         {
             public Guid Id { get; set; }
             public string Description { get; set; }
+            public bool Status { get; set; }
         }
         public class Validator : AbstractValidator<Command>
         {
