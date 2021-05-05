@@ -17,10 +17,11 @@ using System.Threading.Tasks;
 
 namespace Application.AdminCQ.Queries
 {
-    public class GetReportedUsers
+    public class GetLibraryReports
     {
-        public class Query : IRequest<ReportedUsersPageDTO>
+        public class Query : IRequest<LibraryReportsPageDTO>
         {
+            public Guid LibraryId { get; set; }
             public int NumberPage { get; set; } = 0;
             public int PageSize { get; set; } = 10;
         }
@@ -31,7 +32,7 @@ namespace Application.AdminCQ.Queries
 
             }
         }
-        public class Handler : IRequestHandler<Query, ReportedUsersPageDTO>
+        public class Handler : IRequestHandler<Query, LibraryReportsPageDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -45,18 +46,20 @@ namespace Application.AdminCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<ReportedUsersPageDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<LibraryReportsPageDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-
-                ReportedUsersPageDTO res = new ReportedUsersPageDTO();
+                LibraryReportsPageDTO res = new LibraryReportsPageDTO();
                 res.PageSize = request.PageSize;
                 res.CurrentPage = request.NumberPage;
-                var users = await db.Users.Include(x => x.UserReports)
-                    .Where(x => x.UserReports.Count > 0)
+                res.TotalReports = await db.LibraryReports.CountAsync(x => x.LibraryId == request.LibraryId);
+                res.AdmittedReports = await db.LibraryReports.CountAsync(x => x.LibraryId == request.LibraryId && x.Status == ReportStatus.Admitted);
+                var reports = await db.LibraryReports
+                    .Include(x => x.User)
+                    .Where(x => x.LibraryId == request.LibraryId)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)
                     .ToListAsync();
-                res.Users = mapper.Map<List<User>, List<ReportedUserDTO>>(users);
+                res.Reports = mapper.Map<List<LibraryReport>, List<LibraryReportDTO>>(reports);
                 return res;
             }
         }

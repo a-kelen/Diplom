@@ -19,13 +19,13 @@ namespace Application.AdminCQ.Queries
 {
     public class AllUsers
     {
-        public class Query : IRequest<List<UserDTO>>
+        public class Query : IRequest<UsersPageDTO>
         {
-            public int NumberPage { get; set; } = 1;
+            public int NumberPage { get; set; } = 0;
             public int PageSize { get; set; } = 10;
         }
 
-        public class Handler : IRequestHandler<Query, List<UserDTO>>
+        public class Handler : IRequestHandler<Query, UsersPageDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -39,15 +39,19 @@ namespace Application.AdminCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<List<UserDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<UsersPageDTO> Handle(Query request, CancellationToken cancellationToken)
             {
                 var currentUser = userAccesor.GetUser();
-                var res =  await db.Users.
-                    Where(x => x.NormalizedEmail != currentUser.NormalizedEmail)
+                UsersPageDTO res = new UsersPageDTO();
+                res.TotalUsers = await db.Users.CountAsync();
+                var users = await db.Users
+                    .Include(x => x.UserReports)
+                    .Where(x => x.NormalizedEmail != currentUser.NormalizedEmail)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)
                     .ToListAsync();
-                return mapper.Map <List<User>, List<UserDTO>> (res);    
+                res.Users = mapper.Map<List<User>, List<TableUserDTO>>(users); 
+                return res; 
             }
         }
     }

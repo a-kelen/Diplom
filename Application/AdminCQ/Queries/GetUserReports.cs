@@ -17,10 +17,11 @@ using System.Threading.Tasks;
 
 namespace Application.AdminCQ.Queries
 {
-    public class GetReportedUsers
+    public class GetUserReports
     {
-        public class Query : IRequest<ReportedUsersPageDTO>
+        public class Query : IRequest<UserReportsPageDTO>
         {
+            public string Email { get; set; }
             public int NumberPage { get; set; } = 0;
             public int PageSize { get; set; } = 10;
         }
@@ -28,10 +29,10 @@ namespace Application.AdminCQ.Queries
         {
             public Validator()
             {
-
+                RuleFor(x => x.Email).NotEmpty();
             }
         }
-        public class Handler : IRequestHandler<Query, ReportedUsersPageDTO>
+        public class Handler : IRequestHandler<Query, UserReportsPageDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -45,18 +46,23 @@ namespace Application.AdminCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<ReportedUsersPageDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<UserReportsPageDTO> Handle(Query request, CancellationToken cancellationToken)
             {
+                var user = await db.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
 
-                ReportedUsersPageDTO res = new ReportedUsersPageDTO();
+                UserReportsPageDTO res = new UserReportsPageDTO();
                 res.PageSize = request.PageSize;
                 res.CurrentPage = request.NumberPage;
-                var users = await db.Users.Include(x => x.UserReports)
-                    .Where(x => x.UserReports.Count > 0)
+                res.TotalReports = await db.UserReports.CountAsync(x => x.PersonId == user.Id);
+                res.AdmittedReports = await db.UserReports.CountAsync(x => x.PersonId == user.Id && x.Status == ReportStatus.Admitted);
+
+                var reports = await db.UserReports
+                    .Include(x => x.User)
+                    .Where(x => x.PersonId == user.Id)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)
                     .ToListAsync();
-                res.Users = mapper.Map<List<User>, List<ReportedUserDTO>>(users);
+                res.Reports = mapper.Map<List<UserReport>, List<UserReportDTO>>(reports);
                 return res;
             }
         }

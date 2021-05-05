@@ -17,10 +17,11 @@ using System.Threading.Tasks;
 
 namespace Application.AdminCQ.Queries
 {
-    public class GetReportedUsers
+    public class GetComponentReports
     {
-        public class Query : IRequest<ReportedUsersPageDTO>
+        public class Query : IRequest<ComponentReportsPageDTO>
         {
+            public Guid ComponentId { get; set; }
             public int NumberPage { get; set; } = 0;
             public int PageSize { get; set; } = 10;
         }
@@ -31,7 +32,7 @@ namespace Application.AdminCQ.Queries
 
             }
         }
-        public class Handler : IRequestHandler<Query, ReportedUsersPageDTO>
+        public class Handler : IRequestHandler<Query, ComponentReportsPageDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -45,18 +46,20 @@ namespace Application.AdminCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<ReportedUsersPageDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ComponentReportsPageDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-
-                ReportedUsersPageDTO res = new ReportedUsersPageDTO();
+                ComponentReportsPageDTO res = new ComponentReportsPageDTO();
                 res.PageSize = request.PageSize;
                 res.CurrentPage = request.NumberPage;
-                var users = await db.Users.Include(x => x.UserReports)
-                    .Where(x => x.UserReports.Count > 0)
+                res.TotalReports = await db.ComponentReports.CountAsync(x => x.ComponentId == request.ComponentId);
+                res.AdmittedReports = await db.ComponentReports.CountAsync(x => x.ComponentId == request.ComponentId && x.Status == ReportStatus.Admitted);
+                var reports = await db.ComponentReports
+                    .Include(x => x.User)
+                    .Where(x => x.ComponentId == request.ComponentId)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)
                     .ToListAsync();
-                res.Users = mapper.Map<List<User>, List<ReportedUserDTO>>(users);
+                res.Reports = mapper.Map<List<ComponentReport>, List<ComponentReportDTO>>(reports);
                 return res;
             }
         }

@@ -6,5 +6,9 @@ namespace Application.DTO
 {
     public class LibraryReportDTO
     {
+        public Guid Id { get; set; }
+        public string Status { get; set; }
+        public string Content { get; set; }
+        public string Username { get; set; }
     }
 }

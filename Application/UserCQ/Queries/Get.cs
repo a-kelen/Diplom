@@ -47,8 +47,8 @@ namespace Application.UserCQ.Queries
             public async Task<DetailedUserDTO> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = db.Users
-                    .Include(x => x.Components)
-                    .Include(x => x.Libraries)
+                    .Include(x => x.Components.Where(t => t.Status == true))
+                    .Include(x => x.Libraries.Where(t => t.Status == true))
                     .Include(x => x.Followers)
                     .Include(x => x.Follows)
                     .FirstOrDefault(x => x.UserName == request.Username);

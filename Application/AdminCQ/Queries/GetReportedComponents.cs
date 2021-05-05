@@ -19,9 +19,10 @@ namespace Application.AdminCQ.Queries
 {
     public class GetReportedComponents
     {
-        public class Query : IRequest<ComponentReportsPageDTO>
+        public class Query : IRequest<ReportedComponentsPageDTO>
         {
-            public int NumberPage { get; set; } = 1;
+            public Guid ComponentId { get; set; }
+            public int NumberPage { get; set; } = 0;
             public int PageSize { get; set; } = 10;
         }
         public class Validator : AbstractValidator<Query>
@@ -31,7 +32,7 @@ namespace Application.AdminCQ.Queries
 
             }
         }
-        public class Handler : IRequestHandler<Query, ComponentReportsPageDTO>
+        public class Handler : IRequestHandler<Query, ReportedComponentsPageDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -45,16 +46,19 @@ namespace Application.AdminCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<ComponentReportsPageDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ReportedComponentsPageDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                ComponentReportsPageDTO res = new ComponentReportsPageDTO();
+                ReportedComponentsPageDTO res = new ReportedComponentsPageDTO();
                 res.PageSize = request.PageSize;
                 res.CurrentPage = request.NumberPage;
-                var reports = await db.ComponentReports
+                var components = await db.Components
+                    .Include(x => x.Reports)
+                    .Include(x => x.Owner)
+                    .Where(x => x.Reports.Count > 0)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)
                     .ToListAsync();
-                res.Reports = mapper.Map<List<ComponentReport>, List<ComponentReportDTO>>(reports);
+                res.Components = mapper.Map<List<Component>, List<ReportedComponentDTO>>(components);
                 return res;
             }
         }

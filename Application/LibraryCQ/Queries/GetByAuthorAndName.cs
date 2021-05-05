@@ -56,7 +56,7 @@ namespace Application.LibraryCQ.Queries
 
                 if (library == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
-                if ( (library.Deleted || library.Status == true) && library.UserId != userId)
+                if ( (library.Deleted || library.Status == false) && library.UserId != userId)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Denied" });
 
                 return mapper.Map<Library, DetailedLibraryDTO>(library);

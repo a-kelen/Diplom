@@ -19,10 +19,10 @@ namespace Application.AdminCQ.Queries
 {
     public class GetReportedLibraries
     {
-        public class Query : IRequest<LibraryReportsPageDTO>
+        public class Query : IRequest<ReportedLibrariesPageDTO>
         {
-            public int NumberPage { get; set; }
-            public int PageSize { get; set; }
+            public int NumberPage { get; set; } = 0;
+            public int PageSize { get; set; } = 10;
         }
         public class Validator : AbstractValidator<Query>
         {
@@ -31,7 +31,7 @@ namespace Application.AdminCQ.Queries
 
             }
         }
-        public class Handler : IRequestHandler<Query, LibraryReportsPageDTO>
+        public class Handler : IRequestHandler<Query, ReportedLibrariesPageDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -45,16 +45,19 @@ namespace Application.AdminCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<LibraryReportsPageDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ReportedLibrariesPageDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                LibraryReportsPageDTO res = new LibraryReportsPageDTO();
+                ReportedLibrariesPageDTO res = new ReportedLibrariesPageDTO();
                 res.PageSize = request.PageSize;
                 res.CurrentPage = request.NumberPage;
-                var reports = await db.LibraryReports
+                var libraries = await db.Libraries
+                    .Include(x => x.Reports)
+                    .Include(x => x.Owner)
+                    .Where(x => x.Reports.Count > 0)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)
                     .ToListAsync();
-                res.Reports = mapper.Map<List<LibraryReport>, List<LibraryReportDTO>>(reports);
+                res.Libraries = mapper.Map<List<Library>, List<ReportedLibraryDTO>>(libraries);
                 return res;
             }
         }
