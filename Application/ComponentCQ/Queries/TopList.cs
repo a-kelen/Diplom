@@ -48,7 +48,7 @@ namespace Application.ComponentCQ.Queries
 
                 var res = await db.Components
                     .Include(x => x.Owner)
-                    .Where(x => ids.Contains(x.Id))
+                    .Where(x => ids.Contains(x.Id) && x.Status == true)
                     .ToListAsync();
 
                 return mapper.Map <List<Component>, List<ComponentDTO>>(res);

@@ -16,6 +16,12 @@ namespace API.Controllers
     [Authorize(Roles = "admin")]
     public class AdminController : BaseConttoller
     {
+        [HttpGet("role")]
+        public async Task<ActionResult<string>> GetRole()
+        {
+            return await Mediator.Send(new GetRole.Query());
+        }
+
         [HttpGet("users")]
         public async Task<ActionResult<UsersPageDTO>> GetUsers([FromQuery] AllUsers.Query query)
         {

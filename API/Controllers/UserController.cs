@@ -61,7 +61,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> Register(Register.Command command)
+        public async Task<ActionResult<CurrentUserDTO>> Register(Register.Command command)
         {
             return await Mediator.Send(command);
         }

@@ -1,50 +1,59 @@
-﻿using Application.Exceptions;
+﻿using Application.DTO;
+using Application.Exceptions;
 using Application.Interfaces;
-using Application.DTO;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.UserCQ.Queries
+namespace Application.AdminCQ.Queries
 {
-    public class Current
+    public class GetRole
     {
-        public class Query : IRequest<CurrentUserDTO>
+        public class Query : IRequest<string>
         {
 
         }
-        public class Handler : IRequestHandler<Query, CurrentUserDTO>
+        public class Validator : AbstractValidator<Query>
+        {
+            public Validator()
+            {
+
+            }
+        }
+        public class Handler : IRequestHandler<Query, string>
         {
             DataContext db;
             iUserAccessor userAccesor;
             IMapper mapper;
-            private readonly iJWTGenerator _jwtGenerator;
+            UserManager<User> userManager;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccesor
                            , IMapper mapper
-                           , iJWTGenerator jwtGenerator)
+                           , UserManager<User> userManager)
             {
                 this.db = dataContext;
                 this.userAccesor = userAccesor;
                 this.mapper = mapper;
-                this._jwtGenerator = jwtGenerator;
+                this.userManager = userManager;
             }
 
-            public async Task<CurrentUserDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<string> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = userAccesor.GetUser();
-                if (user == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                return mapper.Map<User, CurrentUserDTO>(user);
+                var roles = await userManager.GetRolesAsync(user);
+
+                return roles[0];
             }
         }
     }

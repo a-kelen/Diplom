@@ -21,9 +21,10 @@ namespace Application.UserCQ.Commands
 {
     public class Register
     {
-        public class Command : IRequest<UserDTO>
+        public class Command : IRequest<CurrentUserDTO>
         {
-            public string DisplayName { get; set; }
+            public string Firstname { get; set; }
+            public string Lastname { get; set; }
             public string Username { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
@@ -33,14 +34,15 @@ namespace Application.UserCQ.Commands
         {
             public CommandValidator()
             {
-                RuleFor(x => x.DisplayName).NotEmpty();
+                RuleFor(x => x.Firstname).NotEmpty();
+                RuleFor(x => x.Lastname).NotEmpty();
                 RuleFor(x => x.Username).NotEmpty();
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
                 RuleFor(x => x.Password).Password();
             }
         }
 
-        public class Handler : IRequestHandler<Command, UserDTO>
+        public class Handler : IRequestHandler<Command, CurrentUserDTO>
         {
             private readonly DataContext _context;
             private readonly UserManager<User> _userManager;
@@ -52,7 +54,7 @@ namespace Application.UserCQ.Commands
                 this._context = context;
             }
 
-            public async Task<UserDTO> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<CurrentUserDTO> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (await _context.Users.Where(x => x.Email == request.Email).AnyAsync())
                     throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email already exists" });
@@ -63,14 +65,16 @@ namespace Application.UserCQ.Commands
                 var user = new User
                 {
                     Email = request.Email,
-                    UserName = request.Username
+                    UserName = request.Username,
+                    Firstname = request.Firstname,
+                    Lastname = request.Lastname
                 };
 
                 var result = await _userManager.CreateAsync(user, request.Password);
 
                 if (result.Succeeded)
                 {
-                    return mapper.Map<User, UserDTO>(user);
+                    return mapper.Map<User, CurrentUserDTO>(user);
                 }
 
                 throw new Exception("Problem creating user");

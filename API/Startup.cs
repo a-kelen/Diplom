@@ -60,7 +60,16 @@ namespace API
             services.TryAddSingleton<ISystemClock, SystemClock>();
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), s => s.MigrationsAssembly("API"));
+                opt.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    s => {
+                        s.MigrationsAssembly("API");
+                        s.EnableRetryOnFailure(
+                           maxRetryCount: 3,
+                           maxRetryDelay: TimeSpan.FromSeconds(30),
+                           errorNumbersToAdd: null);
+                    });
+
             });
 
             var builder = services.AddIdentityCore<User>();
