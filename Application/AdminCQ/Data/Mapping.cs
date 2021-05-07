@@ -24,19 +24,24 @@ namespace Application.AdminCQ.Data
 
             CreateMap<User, TableUserDTO>()
                 .ForMember(d => d.Name, o => o.MapFrom(r => r.Firstname + " " + r.Lastname))
-                .ForMember(d => d.Status, o => o.MapFrom(r => r.Block == null ? "Active" : "Blocked"));
+                .ForMember(d => d.Username, o => o.MapFrom(r => r.UserName))
+                .ForMember(d => d.Status, o => o.MapFrom(r => r.Block == null ? "Active" : "Blocked"))
+                .AfterMap<TableUserAction>();
 
             CreateMap<User, ReportedUserDTO>()
                 .ForMember(d => d.Name, o => o.MapFrom(r => r.Firstname + " " + r.Lastname))
                 .ForMember(d => d.Username, o => o.MapFrom(r => r.UserName))
-                .ForMember(d => d.ReportsCount, o => o.MapFrom(r => r.UserReports.Count));
+                .ForMember(d => d.ReportsCount, o => o.MapFrom(r => r.UserReports.Count))
+            .ForMember(d => d.Status, o => o.MapFrom(r => r.Block == null ? "Active" : "Blocked"));
 
             CreateMap<Component, ReportedComponentDTO>()
                 .ForMember(d => d.ReportsCount, o => o.MapFrom(r => r.Reports.Count))
-                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName));
+                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
+                .ForMember(d => d.Status, o => o.MapFrom(r => r.Block == null ? "Active" : "Blocked"));
 
             CreateMap<Library, ReportedLibraryDTO>()
                 .ForMember(d => d.ReportsCount, o => o.MapFrom(r => r.Reports.Count))
+                .ForMember(d => d.Status, o => o.MapFrom(r => r.Block == null ? "Active" : "Blocked"))
                 .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName));
         }
     }

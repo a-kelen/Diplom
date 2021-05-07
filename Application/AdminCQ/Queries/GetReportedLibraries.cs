@@ -50,9 +50,13 @@ namespace Application.AdminCQ.Queries
                 ReportedLibrariesPageDTO res = new ReportedLibrariesPageDTO();
                 res.PageSize = request.PageSize;
                 res.CurrentPage = request.NumberPage;
+                res.TotalReports = await db.Libraries
+                    .Include(x => x.Reports)
+                    .CountAsync(x => x.Reports.Count > 0);
                 var libraries = await db.Libraries
                     .Include(x => x.Reports)
                     .Include(x => x.Owner)
+                    .Include(x => x.Block)
                     .Where(x => x.Reports.Count > 0)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)

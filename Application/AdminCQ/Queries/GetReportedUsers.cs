@@ -51,7 +51,12 @@ namespace Application.AdminCQ.Queries
                 ReportedUsersPageDTO res = new ReportedUsersPageDTO();
                 res.PageSize = request.PageSize;
                 res.CurrentPage = request.NumberPage;
-                var users = await db.Users.Include(x => x.UserReports)
+                res.TotalReports = await db.Users
+                    .Include(x => x.UserReports)
+                    .CountAsync(x => x.UserReports.Count > 0);
+                var users = await db.Users
+                    .Include(x => x.UserReports)
+                    .Include(x => x.Block)
                     .Where(x => x.UserReports.Count > 0)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)

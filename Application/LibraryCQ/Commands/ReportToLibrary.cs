@@ -48,13 +48,16 @@ namespace Application.LibraryCQ.Commands
                 if (library == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
 
-                LibraryReport report = new LibraryReport
+                for(int i = 0; i < 10; i++)
                 {
-                    UserId = userId,
-                    LibraryId = library.Id,
-                    Content = request.Content
-                };
-                await db.LibraryReports.AddAsync(report);
+                    LibraryReport report = new LibraryReport
+                    {
+                        UserId = userId,
+                        LibraryId = library.Id,
+                        Content = request.Content
+                    };
+                    await db.LibraryReports.AddAsync(report);
+                }
                 return await db.SaveChangesAsync() > 0;
             }
         }

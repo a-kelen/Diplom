@@ -25,7 +25,7 @@ namespace API
                 {
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var rolesManager = services.GetRequiredService<RoleManager<Role>>();
-                    //await RoleInitializer.InitializeAsync(userManager, rolesManager);
+                    await RoleInitializer.InitializeAsync(userManager, rolesManager);
                 }
                 catch (Exception ex)
                 {

@@ -47,13 +47,7 @@ namespace Application.AdminCQ.Commands
             public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 var moderatorId = userAccessor.GetId();
-                if (request.ReportType == "user")
-                {   
-                    if(await db.Users.FindAsync(request.ReportId) == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { User = "Not Found" });
-                    db.UserBlocks.Add(new UserBlock { PersonId = request.ReportId, UserId = moderatorId });
-                }
-                else if (request.ReportType == "library")
+                if (request.ReportType == "library")
                 {
                     if (await db.Libraries.FindAsync(request.ReportId) == null)
                         throw new RestException(HttpStatusCode.NotFound, new { Library = "Not Found" });

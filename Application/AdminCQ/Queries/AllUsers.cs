@@ -46,6 +46,7 @@ namespace Application.AdminCQ.Queries
                 res.TotalUsers = await db.Users.CountAsync();
                 var users = await db.Users
                     .Include(x => x.UserReports)
+                    .Include(x => x.Block)
                     .Where(x => x.NormalizedEmail != currentUser.NormalizedEmail)
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)

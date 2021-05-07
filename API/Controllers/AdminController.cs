@@ -22,6 +22,12 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
+        [HttpGet("search-users")]
+        public async Task<ActionResult<UsersPageDTO>> SearchUsers([FromQuery] SearchUsers.Query query)
+        {
+            return await Mediator.Send(query);
+        }
+
         [HttpGet("reported-users")]
         public async Task<ActionResult<ReportedUsersPageDTO>> GetReportedUsers([FromQuery] GetReportedUsers.Query query)
         {
@@ -72,6 +78,12 @@ namespace API.Controllers
 
         [HttpPost("block-element")]
         public async Task<ActionResult<bool>> BlockElement(BlockElement.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("switch-block-user")]
+        public async Task<ActionResult<TableUserDTO>> SwitchBlockUser(SwitchBlockUser.Command command)
         {
             return await Mediator.Send(command);
         }

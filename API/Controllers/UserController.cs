@@ -78,7 +78,24 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        
+        [HttpPost("change-password")]
+        public async Task<ActionResult<bool>> ChangePassword(ChangePassword.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("avatar")]
+        public async Task<ActionResult<bool>> UpdateAvatar([FromForm]UpdateAvatar.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<UserDTO>> EditProfile(EditProfile.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
 
 
 

@@ -16,7 +16,10 @@ namespace API
             if (await roleManager.FindByNameAsync("admin") == null)
             {
                 await roleManager.CreateAsync(new Role { Name = "admin" });
-                Console.WriteLine("sa");
+            }
+            if (await roleManager.FindByNameAsync("moderator") == null)
+            {
+                await roleManager.CreateAsync(new Role { Name = "moderator" });
             }
 
             if (await userManager.FindByEmailAsync(adminEmail) != null)

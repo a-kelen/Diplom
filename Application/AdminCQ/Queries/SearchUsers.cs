@@ -17,11 +17,11 @@ using System.Threading.Tasks;
 
 namespace Application.AdminCQ.Queries
 {
-    public class GetReportedComponents
+    public class SearchUsers
     {
-        public class Query : IRequest<ReportedComponentsPageDTO>
+        public class Query : IRequest<UsersPageDTO>
         {
-            public Guid ComponentId { get; set; }
+            public string SearchQuery { get; set; }
             public int NumberPage { get; set; } = 0;
             public int PageSize { get; set; } = 10;
         }
@@ -29,10 +29,10 @@ namespace Application.AdminCQ.Queries
         {
             public Validator()
             {
-
+                RuleFor(x => x.SearchQuery).NotEmpty();
             }
         }
-        public class Handler : IRequestHandler<Query, ReportedComponentsPageDTO>
+        public class Handler : IRequestHandler<Query, UsersPageDTO>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -46,23 +46,18 @@ namespace Application.AdminCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<ReportedComponentsPageDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<UsersPageDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                ReportedComponentsPageDTO res = new ReportedComponentsPageDTO();
-                res.PageSize = request.PageSize;
-                res.CurrentPage = request.NumberPage;
-                res.TotalReports = await db.Components
-                    .Include(x => x.Reports)
-                    .CountAsync(x => x.Reports.Count > 0);
-                var components = await db.Components
-                    .Include(x => x.Reports)
-                    .Include(x => x.Owner)
-                    .Include(x => x.Block)
-                    .Where(x => x.Reports.Count > 0)
+                var currentUser = userAccesor.GetUser();
+                UsersPageDTO res = new UsersPageDTO();
+                res.TotalUsers = await db.Users.CountAsync();
+                var users = await db.Users
+                    .Include(x => x.UserReports)
+                    .Where(x => x.Email.Contains(request.SearchQuery))
                     .Skip(request.NumberPage * request.PageSize)
                     .Take(request.PageSize)
                     .ToListAsync();
-                res.Components = mapper.Map<List<Component>, List<ReportedComponentDTO>>(components);
+                res.Users = mapper.Map<List<User>, List<TableUserDTO>>(users);
                 return res;
             }
         }

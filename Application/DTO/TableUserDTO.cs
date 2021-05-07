@@ -9,5 +9,8 @@ namespace Application.DTO
         public string Name { get; set; }
         public string Email { get; set; }
         public string Status { get; set; }
+        public string Username { get; set; }
+        public int TotalReports { get; set; }
+        public int AdmittedReports { get; set; }
     }
 }
