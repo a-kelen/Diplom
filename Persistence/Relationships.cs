@@ -105,9 +105,7 @@ namespace Persistence
                .WithOne(g => g.Component)
                .HasForeignKey(g => g.ComponentId);
 
-            builder.Entity<Component>().HasMany(t => t.Files)
-                .WithOne(g => g.Component)
-                .HasForeignKey(g => g.ComponentId);
+            
 
             builder.Entity<Component>().HasMany(t => t.Reports)
                 .WithOne(g => g.Component)

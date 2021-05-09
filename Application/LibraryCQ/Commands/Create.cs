@@ -22,6 +22,7 @@ namespace Application.LibraryCQ.Commands
         {
             public string Name { get; set; }
             public string Description { get; set; }
+            public string Type { get; set; }
             public bool Status { get; set; }
             public List<ComponentVM> Components { get; set; }
 
@@ -31,6 +32,7 @@ namespace Application.LibraryCQ.Commands
             public Validator()
             {
                 RuleFor(x => x.Name).NotEmpty();
+                
             }
         }
         public class Handler : IRequestHandler<Command, LibraryDTO>
@@ -49,11 +51,12 @@ namespace Application.LibraryCQ.Commands
 
             public async Task<LibraryDTO> Handle(Command request, CancellationToken cancellationToken)
             {
+                
                 Library library = mapper.Map<Command, Library>(request);
+                library.Type = Enum.Parse<ElementType>(request.Type);
                 library.UserId = userAccessor.GetId();
                 var res = await db.Libraries.AddAsync(library);
                 await db.SaveChangesAsync();
-
                 return mapper.Map<Library, LibraryDTO>(res.Entity);
             }
         }

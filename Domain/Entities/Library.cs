@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string File { get; set; }
         public bool Deleted { get; set; }
         public string Avatar { get; set; }
+        public ElementType Type { get; set; }
         public string Description { get; set; }
         public Guid BlockId { get; set; }
         public LibraryBlock Block { get; set; }

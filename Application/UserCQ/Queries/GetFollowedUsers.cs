@@ -17,13 +17,20 @@ using System.Threading.Tasks;
 
 namespace Application.UserCQ.Queries
 {
-    public class TopList
+    public class GetFollowedUsers
     {
-        public class Query : IRequest<List<UserDTO>>
+        public class Query : IRequest<List<FollowDTO>>
         {
 
         }
-        public class Handler : IRequestHandler<Query, List<UserDTO>>
+        public class Validator : AbstractValidator<Query>
+        {
+            public Validator()
+            {
+
+            }
+        }
+        public class Handler : IRequestHandler<Query, List<FollowDTO>>
         {
             DataContext db;
             iUserAccessor userAccesor;
@@ -37,16 +44,13 @@ namespace Application.UserCQ.Queries
                 this.mapper = mapper;
             }
 
-            public async Task<List<UserDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<FollowDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var res = await db.Users
-                    .Include(x => x.Followers)
-                    .Include(x => x.Libraries.Where(x => x.Status == true))
-                    .Include(x => x.Components.Where(x => x.Status == true))
-                    .OrderByDescending(x => x.Followers.Count * (x.Components.Count + x.Libraries.Count))
-                    .Take(50).ToListAsync();
+                var userId = userAccesor.GetId();
+                var ids = db.Followers.Where(x => x.UserId == userId).Select(x => x.PersonId);
 
-                return mapper.Map <List<User>, List<UserDTO>>(res);
+                var res = await db.Users.Where(x => ids.Contains(x.Id)).ToListAsync();
+                return mapper.Map <List<User>, List<FollowDTO>> (res);
             }
         }
     }

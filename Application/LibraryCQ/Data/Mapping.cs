@@ -29,6 +29,12 @@ namespace Application.LibraryCQ.Data
             
             CreateMap<ComponentVM, Component>();
 
+            CreateMap<Library, ActivityDTO>()
+                .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
+                .ForMember(d => d.HasAvatar, o => o.MapFrom(r => r.Owner.Avatar != null))
+                .ForMember(d => d.Date, o => o.MapFrom(r => r.Created))
+                .ForMember(d => d.Name, o => o.MapFrom(r => r.Name))
+                .ForMember(d => d.Type, o => o.MapFrom(r => "library"));
 
         }
     }

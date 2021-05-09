@@ -10,4 +10,13 @@ namespace Domain.Entities
         Admitted,
         Rejected
     }
+
+    public enum ElementType
+    {
+        React,
+        VueJS,
+        VueTS,
+        AngularJS,
+        AngularTS
+    }
 }

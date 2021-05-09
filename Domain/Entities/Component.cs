@@ -14,12 +14,13 @@ namespace Domain.Entities
         public bool Deleted { get; set; }
         public Guid? LibraryId { get; set; }
         public Library Library { get; set; }
+        public ElementType Type { get; set; }
         public string Description { get; set; }
         public string Dependencies { get; set; }
+
         public Guid BlockId { get; set; }
         public ComponentBlock Block { get; set; }
 
-        public List<File> Files { get; set; }
         public List<Prop> Props { get; set; }
         public List<Slot> Slots { get; set; }
         public List<Event> Events { get; set; }

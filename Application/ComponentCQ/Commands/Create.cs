@@ -22,6 +22,7 @@ namespace Application.ComponentCQ.Commands
         {
             public bool Status { get; set; }
             public string Name { get; set; }
+            public string Type { get; set; }
             public string Description { get; set;}
             public string Dependencies { get; set; }
             public List<PropVM> Props { get; set; }
@@ -53,9 +54,8 @@ namespace Application.ComponentCQ.Commands
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
             {
                 Component component = mapper.Map<Command, Component>(request);
-
+                component.Type = Enum.Parse<ElementType>(request.Type);
                 component.UserId = userAccessor.GetId();
-
                 var res = await db.Components.AddAsync(component);
                 await db.SaveChangesAsync();
                 return mapper.Map<Component, ComponentDTO>(res.Entity);

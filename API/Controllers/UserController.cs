@@ -51,6 +51,18 @@ namespace API.Controllers
             return await Mediator.Send(new TopList.Query());
         }
 
+        [HttpGet("activities")]
+        public async Task<ActionResult<ActivitiesPageDTO>> GetLastActivies([FromQuery] GetActivities.Query query)
+        {
+            return await Mediator.Send(query);
+        }
+
+        [HttpGet("followed-users")]
+        public async Task<ActionResult<List<FollowDTO>>> GetFollowedUsers()
+        {
+            return await Mediator.Send(new GetFollowedUsers.Query());
+        }
+
 
         [AllowAnonymous]
         [HttpPost("login")]
