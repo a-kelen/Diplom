@@ -13,9 +13,10 @@ namespace Domain.Entities
 
     public enum ElementType
     {
-        React,
         VueJS,
         VueTS,
+        ReactJS,
+        ReactTS,
         AngularJS,
         AngularTS
     }

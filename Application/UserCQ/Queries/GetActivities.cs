@@ -45,17 +45,20 @@ namespace Application.UserCQ.Queries
                 ActivitiesPageDTO res = new ActivitiesPageDTO();
                 res.Page = request.Page;
                 res.Activities = new List<ActivityDTO>();
+                var follows = user.Follows.Select(x => x.PersonId).ToList();
 
-                var q = db.Components
+                var r = db.Components.Where(x => x.UserId != null && follows.Contains(x.UserId ?? new Guid())).ToList();
+                var q =  db.Components
+                    .Where(x => x.UserId != null && follows.Contains(x.UserId ?? new Guid()))
                     .Select(x => new { x.Id, x.Created })
-                    .Union(db.Libraries.Select(x => new { x.Id, x.Created }))
+                    .Union(db.Libraries.Where(x => x.UserId != null && follows.Contains(x.UserId)).Select(x => new { x.Id, x.Created }))
                     .OrderByDescending(x => x.Created)
                     .Skip(request.Page)
                     .Take(30);
 
                 var componentActivities = await db.Components
                     .Include(x => x.Owner)
-                    .Where(x => q.AsQueryable()
+                    .Where(x => q
                         .Select(x => x.Id)
                         .Contains(x.Id) &&
                         x.LibraryId == null)
@@ -63,14 +66,14 @@ namespace Application.UserCQ.Queries
 
                 var libraryActivities = await db.Libraries
                     .Include(x => x.Owner)
-                    .Where(x => q.AsQueryable()
+                    .Where(x => q
                     .Select(x => x.Id)
                     .Contains(x.Id))
                     .ToListAsync();
 
                 res.Activities.AddRange(mapper.Map<List<Component>, List<ActivityDTO>>(componentActivities));
                 res.Activities.AddRange(mapper.Map<List<Library>, List<ActivityDTO>>(libraryActivities));
-
+                res.Activities.OrderByDescending(x => x.Date);
                 return res;
             }
         }

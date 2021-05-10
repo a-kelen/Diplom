@@ -33,6 +33,12 @@ namespace API.Controllers
             return await Mediator.Send(new GetById.Query { Id = id });
         }
 
+        [HttpGet]
+        public async Task<ActionResult<DetailedComponentDTO>> GetComponentByNameAndOwner([FromQuery] GetByNameAndOwner.Query query)
+        {
+            return await Mediator.Send(query);
+        }
+
         [HttpGet("search/{searchQuery}")]
         public async Task<ActionResult<List<ComponentDTO>>> SearchComponent(string searchQuery)
         {

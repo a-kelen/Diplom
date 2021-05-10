@@ -43,7 +43,7 @@ namespace Application.LibraryCQ.Queries
                 var id = userAccesor.GetId();
                 var res = db.OwnedLibraries
                     .Where(x => x.UserId == id)
-                    .Include(x => x.Library)
+                    .Include(x => x.Library).ThenInclude(x => x.Components)
                     .ThenInclude(x => x.Owner)
                     .Select(x => x.Library).ToList();
 

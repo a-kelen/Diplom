@@ -14,6 +14,7 @@ namespace Application.UserCQ.Data
         {
             CreateMap<User, CurrentUserDTO>()
                 .ForMember(x => x.Name, o => o.MapFrom(s => s.Firstname + " " + s.Lastname))
+                .ForMember(d => d.HasAvatar, o => o.MapFrom(r => r.Avatar != null))
                 .ForMember(x => x.Username, o => o.MapFrom(s => s.UserName))
                 .AfterMap<TokenAction>();
 

@@ -48,7 +48,7 @@ namespace Application.ComponentCQ.Queries
             {
                 var res = await db.Components
                     .Where(x => 
-                        x.Status == false && 
+                        x.Status == true && 
                         x.UserId != null &&
                         x.Name.Contains(request.SearchQuery)
                     ).ToListAsync();
