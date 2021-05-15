@@ -31,6 +31,7 @@ using static Application.ComponentCQ.Commands.Create;
 using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.CookiePolicy;
+using API.Common;
 
 namespace API
 {
@@ -173,7 +174,7 @@ namespace API
             }
 
             app.UseHttpsRedirection();
-           
+            app.UseCustomExceptionHandler();
             app.UseRouting();
             app.Use(async (context, next) =>
             {

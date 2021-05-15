@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
@@ -14,5 +15,10 @@ namespace Application.Exceptions
             Code = code;
             Errors = err;
         }
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
     }
 }
