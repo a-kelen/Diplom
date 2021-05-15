@@ -20,4 +20,17 @@ namespace Domain.Entities
         AngularJS,
         AngularTS
     }
+
+    public enum HistoryAction
+    {
+        Created,
+        Owned,
+        Installed
+    }
+
+    public enum HistoryType
+    {
+        Library,
+        Component
+    }
 }

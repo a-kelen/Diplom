@@ -38,6 +38,11 @@ namespace Application.UserCQ.Data
                 .ForMember(x => x.Username, o => o.MapFrom(s => s.UserName))
                 .ForMember(d => d.HasAvatar, o => o.MapFrom(r => r.Avatar != null))
                 .ForMember(x => x.Name, o => o.MapFrom(s => s.Firstname + " " + s.Lastname));
+
+            CreateMap<HistoryItem, HistoryItemDTO>()
+                .ForMember(x => x.Date, o => o.MapFrom(s => s.Created))
+                .ForMember(d => d.Type, o => o.MapFrom(r => r.Type.ToString()))
+                .AfterMap<HistoryAction>();
         }
     }
 }

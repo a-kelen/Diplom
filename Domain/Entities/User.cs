@@ -24,5 +24,6 @@ namespace Domain.Entities
         public List<OwnedComponent> OwnedComponents { get; set; }
         public List<UserReport> UserReports { get; set; }
         public List<Role> Roles { get; set; }
+        public List<HistoryItem> HistoryItems { get; set; }
     }
 }

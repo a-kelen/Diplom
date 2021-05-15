@@ -190,6 +190,36 @@ namespace API.Migrations
                     b.ToTable("Followers");
                 });
 
+            modelBuilder.Entity("Domain.Entities.HistoryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<Guid>("ElementId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("HistoryItems");
+                });
+
             modelBuilder.Entity("Domain.Entities.Library", b =>
                 {
                     b.Property<Guid>("Id")
@@ -526,15 +556,15 @@ namespace API.Migrations
                             Id = new Guid("d2429acd-e887-47f8-8ad2-6502e05c9068"),
                             AccessFailedCount = 0,
                             BlockId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ConcurrencyStamp = "02d60581-a60d-4f06-9b68-fdb39e6a5f92",
-                            Created = new DateTime(2021, 5, 9, 17, 27, 34, 783, DateTimeKind.Local).AddTicks(2650),
+                            ConcurrencyStamp = "0167c39e-0c68-4bb0-89d9-427648e8d56a",
+                            Created = new DateTime(2021, 5, 15, 16, 49, 48, 347, DateTimeKind.Local).AddTicks(3673),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Admin",
                             Lastname = "Adminenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJgnqMMdfPQaLlqN4CyQTG8yNkncoN+f2HptxiZeUtEOctgfSDb25W8buLH1DzV48Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOPU/SbalkbedgVDmBV/zzcxf6+b1NbigQF8KQz1JLoFmkoHTJCrKH3LaHAKLpxrrw==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin"
@@ -544,15 +574,15 @@ namespace API.Migrations
                             Id = new Guid("d350afff-86b3-449b-be6c-e87394d5a629"),
                             AccessFailedCount = 0,
                             BlockId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ConcurrencyStamp = "da97ee0b-bf3a-48b9-8f4a-ca22ae229a2b",
-                            Created = new DateTime(2021, 5, 9, 17, 27, 34, 786, DateTimeKind.Local).AddTicks(7002),
+                            ConcurrencyStamp = "d96ac49b-7f7c-4397-afbc-b688a60d616c",
+                            Created = new DateTime(2021, 5, 15, 16, 49, 48, 352, DateTimeKind.Local).AddTicks(1811),
                             Email = "user1@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "User1",
                             Lastname = "Userenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJsDOFrbgnO4CP6SQiNIHZykRP+HSC7u+UflC3leDmR5TrYIAnQh+LhT1hhdbSdA8A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKw8ns1aKSvMFs+PZo7Uin2+ISdNHRP2YX9eoIZzqGOycSwy/F1MEt7URPWvcxIDQQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "user1"
@@ -809,6 +839,17 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.HistoryItem", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("HistoryItems")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.Library", b =>
                 {
                     b.HasOne("Domain.Entities.User", "Owner")
@@ -1049,6 +1090,8 @@ namespace API.Migrations
                     b.Navigation("Followers");
 
                     b.Navigation("Follows");
+
+                    b.Navigation("HistoryItems");
 
                     b.Navigation("Libraries");
 

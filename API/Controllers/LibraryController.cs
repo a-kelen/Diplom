@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Application.LibraryCQ.Commands;
 using Application.DTO;
 using Application.LibraryCQ.Queries;
+using Application.Notifications;
+using Domain.Entities;
 
 namespace API.Controllers
 {
@@ -65,6 +67,16 @@ namespace API.Controllers
 
             var result = await Mediator.Send(new GetLibraryAvatar.Query { LibraryId = id });
             return File(result, "image/jpeg");
+        }
+
+        [HttpGet("download/{id}")]
+
+        public async Task<ActionResult<List<ComponentDTO>>> DownLoad(Guid id)
+        {
+
+            var res = await Mediator.Send(new Download.Query { Id = id });
+            await Mediator.Publish(new HistoryNotification { Type = HistoryType.Library, ElementId = id, Action = HistoryAction.Installed });
+            return res;
         }
 
 

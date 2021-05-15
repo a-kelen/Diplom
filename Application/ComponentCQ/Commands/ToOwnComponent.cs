@@ -1,6 +1,7 @@
 ﻿using Application.DTO;
 using Application.Exceptions;
 using Application.Interfaces;
+using Application.Notifications;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
@@ -36,13 +37,16 @@ namespace Application.ComponentCQ.Commands
             DataContext db;
             iUserAccessor userAccessor;
             IMapper mapper;
+            IMediator Mediator;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccessor
-                           , IMapper mapper)
+                           , IMapper mapper
+                           , IMediator mediator)
             {
                 this.db = dataContext;
                 this.userAccessor = userAccessor;
                 this.mapper = mapper;
+                this.Mediator = mediator;
             }
 
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
@@ -58,7 +62,7 @@ namespace Application.ComponentCQ.Commands
 
                 db.OwnedComponents.Add(new OwnedComponent { ComponentId = component.Id, UserId = user.Id });
                 db.SaveChanges();
-
+                await Mediator.Publish(new HistoryNotification { ElementId = component.Id, Type = HistoryType.Component, Action = HistoryAction.Owned });
                 return mapper.Map<Component, ComponentDTO>(component);
             }
         }

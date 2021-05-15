@@ -14,13 +14,16 @@ namespace Application.AdminCQ.Data
 
             CreateMap<UserReport, UserReportDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => r.Status.ToString()))
-                .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName));
+                .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName))
+                .ForMember(d => d.Date, o => o.MapFrom(r => r.User.Created));
             CreateMap<LibraryReport, LibraryReportDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => r.Status.ToString()))
-                .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName));
+                .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName))
+                .ForMember(d => d.Date, o => o.MapFrom(r => r.User.Created));
             CreateMap<ComponentReport, ComponentReportDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => r.Status.ToString()))
-                .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName));
+                .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName))
+                .ForMember(d => d.Date, o => o.MapFrom(r => r.User.Created));
 
             CreateMap<User, TableUserDTO>()
                 .ForMember(d => d.Name, o => o.MapFrom(r => r.Firstname + " " + r.Lastname))

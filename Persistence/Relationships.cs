@@ -47,6 +47,9 @@ namespace Persistence
             builder.Entity<ComponentReport>()
                 .Property(b => b.Created)
                 .HasDefaultValueSql("getdate()");
+            builder.Entity<HistoryItem>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
         }
         static void userRelationships()
         {
@@ -83,8 +86,12 @@ namespace Persistence
             builder.Entity<User>().HasOne(t => t.Block)
                 .WithOne(g => g.Person)
                 .HasForeignKey<UserBlock>(k => k.PersonId)
-                .OnDelete(DeleteBehavior.Restrict); ;
-                
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>().HasMany(t => t.HistoryItems)
+               .WithOne(g => g.User)
+               .HasForeignKey(g => g.UserId);
+
         }
         static void componentRelationships()
         {

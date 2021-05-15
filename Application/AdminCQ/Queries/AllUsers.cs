@@ -44,6 +44,7 @@ namespace Application.AdminCQ.Queries
                 var currentUser = userAccesor.GetUser();
                 UsersPageDTO res = new UsersPageDTO();
                 res.TotalUsers = await db.Users.CountAsync();
+                res.BlockedUsers = await db.UserBlocks.CountAsync();
                 var users = await db.Users
                     .Include(x => x.UserReports)
                     .Include(x => x.Block)

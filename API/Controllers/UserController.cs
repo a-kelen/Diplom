@@ -57,6 +57,12 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
+        [HttpGet("history")]
+        public async Task<ActionResult<List<HistoryItemDTO>>> GetHistory()
+        {
+            return await Mediator.Send(new GetHistory.Query());
+        }
+
         [HttpGet("followed-users")]
         public async Task<ActionResult<List<FollowDTO>>> GetFollowedUsers()
         {
@@ -68,7 +74,15 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<CurrentUserDTO>> Login(Login.Command query)
         {
-            return await Mediator.Send(query);
+            var res = await Mediator.Send(query);
+            CookieOptions options = new CookieOptions { 
+                Expires = DateTime.Now.AddDays(5),
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                HttpOnly = true
+            };
+            HttpContext.Response.Cookies.Append("token", res.Token, options);
+            return res;
         }
 
         [AllowAnonymous]

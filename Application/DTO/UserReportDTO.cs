@@ -10,6 +10,8 @@ namespace Application.DTO
         public string Status { get; set; }
         public string Content { get; set; }
         public string Username { get; set; }
+        public DateTime Date { get; set; }
+
 
     }
 }

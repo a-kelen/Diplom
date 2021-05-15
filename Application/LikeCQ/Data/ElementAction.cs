@@ -25,7 +25,7 @@ namespace Application.LikeCQ.Data
         {
             if(source.Descriminator == LikeDescriminator.Library)
             {
-                destination.Library = mapper.Map<Library, LibraryDTO>(db.Libraries.FirstOrDefault(x => x.Id == source.ElementId));
+                destination.Library = mapper.Map<Library, LibraryDTO>(db.Libraries.Include(x => x.Components).FirstOrDefault(x => x.Id == source.ElementId));
             }
             else
             {

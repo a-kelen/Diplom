@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using Application.Notifications;
 using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
@@ -42,13 +43,16 @@ namespace Application.ComponentCQ.Commands
             DataContext db;
             iUserAccessor userAccessor;
             IMapper mapper;
+            IMediator Mediator;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccessor
-                           , IMapper mapper)
+                           , IMapper mapper
+                           , IMediator mediator)
             {
                 this.db = dataContext;
                 this.userAccessor = userAccessor;
                 this.mapper = mapper;
+                this.Mediator = mediator;
             }
 
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
@@ -58,6 +62,7 @@ namespace Application.ComponentCQ.Commands
                 component.UserId = userAccessor.GetId();
                 var res = await db.Components.AddAsync(component);
                 await db.SaveChangesAsync();
+                await Mediator.Publish(new HistoryNotification { ElementId = res.Entity.Id, Type = HistoryType.Component, Action = HistoryAction.Created });
                 return mapper.Map<Component, ComponentDTO>(res.Entity);
             }
         }

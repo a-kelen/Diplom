@@ -29,6 +29,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using FluentValidation.AspNetCore;
 using static Application.ComponentCQ.Commands.Create;
 using MediatR.Extensions.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace API
 {
@@ -48,10 +50,11 @@ namespace API
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader()
+                    policy.WithOrigins("http://localhost:8080")
+                          .AllowCredentials()
+                          .AllowAnyHeader()
                           .AllowAnyMethod()
                           .WithExposedHeaders("WWW-Authenticate")
-                          .WithOrigins("http://localhost:8080")
                           .AllowCredentials();
                 });
             });
@@ -111,7 +114,14 @@ namespace API
                             return Task.CompletedTask;
                         }
                     };
+                }).AddCookie(options =>
+                {
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.HttpOnly = false;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 });
+
+
 
             services.AddSwaggerGen(swagger =>
             {
@@ -163,8 +173,16 @@ namespace API
             }
 
             app.UseHttpsRedirection();
-
+           
             app.UseRouting();
+            app.Use(async (context, next) =>
+            {
+                var token = context.Request.Cookies["token"];
+                if (!string.IsNullOrEmpty(token))
+                    context.Request.Headers.Add("Authorization", "Bearer " + token);
+
+                await next();
+            });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors("CorsPolicy");

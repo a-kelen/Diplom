@@ -44,7 +44,7 @@ namespace Application.LibraryCQ.Queries
                 var res = db.OwnedLibraries
                     .Where(x => x.UserId == id)
                     .Include(x => x.Library).ThenInclude(x => x.Components)
-                    .ThenInclude(x => x.Owner)
+                    .Include(x => x.Library).ThenInclude(x => x.Owner)
                     .Select(x => x.Library).ToList();
 
                 return mapper.Map<List<Library>, List<LibraryDTO>>(res);

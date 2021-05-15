@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using Application.Notifications;
 using Application.ViewModel;
 using AutoMapper;
 using Domain.Entities;
@@ -40,13 +41,16 @@ namespace Application.LibraryCQ.Commands
             DataContext db;
             iUserAccessor userAccessor;
             IMapper mapper;
+            IMediator Mediator;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccessor
-                           , IMapper mapper)
+                           , IMapper mapper
+                           , IMediator mediator)
             {
                 this.db = dataContext;
                 this.userAccessor = userAccessor;
                 this.mapper = mapper;
+                this.Mediator = mediator;
             }
 
             public async Task<LibraryDTO> Handle(Command request, CancellationToken cancellationToken)
@@ -57,6 +61,7 @@ namespace Application.LibraryCQ.Commands
                 library.UserId = userAccessor.GetId();
                 var res = await db.Libraries.AddAsync(library);
                 await db.SaveChangesAsync();
+                await Mediator.Publish(new HistoryNotification { ElementId = res.Entity.Id, Type = HistoryType.Library, Action = HistoryAction.Created });
                 return mapper.Map<Library, LibraryDTO>(res.Entity);
             }
         }

@@ -56,8 +56,9 @@ namespace API.Controllers
         {
             return await Mediator.Send(new TopList.Query());
         }
-
+        
         [HttpGet("download/{id}")]
+        
         public async Task<ActionResult<List<ComponentDTO>>> DownLoad(Guid id)
         {
 

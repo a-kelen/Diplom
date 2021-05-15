@@ -6,7 +6,8 @@ namespace Application.DTO
 {
     public class FolderDTO
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<string> Components { get; set; }
+        public List<string> Files { get; set; }
     }
 }
