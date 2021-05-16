@@ -10,5 +10,6 @@ namespace Application.DTO
         public string Type { get; set; }
         public DateTime Date { get; set; }
         public string ElementName { get; set; }
+        public string Action { get; set; }
     }
 }

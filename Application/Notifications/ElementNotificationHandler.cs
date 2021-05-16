@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -13,14 +14,17 @@ namespace Application.Notifications
     public class ElementNotificationHandler : INotificationHandler<HistoryNotification>
     {
         DataContext db;
-        public ElementNotificationHandler(DataContext db)
+        iUserAccessor userAccessor;
+        public ElementNotificationHandler(DataContext db, iUserAccessor userAccessor)
         {
             this.db = db;
+            this.userAccessor = userAccessor;
         }
         
         public async Task Handle(HistoryNotification notification, CancellationToken cancellationToken)
         {
-            db.HistoryItems.Add(new HistoryItem { Action = notification.Action, ElementId = notification.ElementId, Type = notification.Type });
+
+            db.HistoryItems.Add(new HistoryItem { Action = notification.Action, ElementId = notification.ElementId, Type = notification.Type, UserId = userAccessor.GetId()});
             await db.SaveChangesAsync();
         }
 

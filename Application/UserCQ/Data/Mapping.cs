@@ -42,7 +42,7 @@ namespace Application.UserCQ.Data
             CreateMap<HistoryItem, HistoryItemDTO>()
                 .ForMember(x => x.Date, o => o.MapFrom(s => s.Created))
                 .ForMember(d => d.Type, o => o.MapFrom(r => r.Type.ToString()))
-                .AfterMap<HistoryAction>();
+                .ForMember(d => d.Action, o => o.MapFrom(r => r.Action.ToString()));
         }
     }
 }

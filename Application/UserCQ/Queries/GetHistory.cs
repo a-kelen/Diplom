@@ -41,9 +41,48 @@ namespace Application.UserCQ.Queries
             public async Task<List<HistoryItemDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var userId = userAccesor.GetId();
+                var history = await db.HistoryItems
+                    .Where(x => x.UserId == userId)
+                    .ToListAsync();
 
-                var history = await db.HistoryItems.Where(x => x.UserId == userId).ToListAsync();       
-                return mapper.Map <List<HistoryItem>, List<HistoryItemDTO>>(history);
+                var historyIds = db.HistoryItems
+                    .Where(x => x.UserId == userId)
+                    .Select(x => x.ElementId);
+
+                var components = await db.Components
+                    .Include(x => x.Owner)
+                    .Where(x => historyIds.Contains(x.Id))
+                    .Select(x => new {
+                       Name = $"@{x.Owner.UserName}/{x.Name}",
+                       Id = x.Id
+                    })
+                    .ToListAsync();
+
+                var libraries = await db.Libraries
+                    .Include(x => x.Owner)
+                    .Where(x => historyIds.Contains(x.Id))
+                    .Select(x => new {
+                        Name = $"@{x.Owner.UserName}/{x.Name}",
+                        Id = x.Id
+                    })
+                    .ToListAsync();
+
+
+
+                var res = mapper.Map<List<HistoryItem>, List<HistoryItemDTO>>(history);
+
+                for(int i = 0; i < history.Count; i++)
+                {
+                    if(history[i].Type == HistoryType.Component)
+                    {
+                        res[i].ElementName = components.First(x => x.Id == history[i].ElementId).Name;
+                    } else
+                    {
+                        res[i].ElementName = libraries.First(x => x.Id == history[i].ElementId).Name;
+                    }
+                }
+
+                return  res;
             }
         }
     }
