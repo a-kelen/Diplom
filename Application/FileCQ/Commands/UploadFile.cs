@@ -60,7 +60,15 @@ namespace Application.FileCQ.Commands
                 List<Domain.Entities.File> Files = new List<Domain.Entities.File>();
                 foreach (var f in request.Files)
                 {
-                    Files.Add(new Domain.Entities.File { Path = f.FileName });
+                    string componentDirectory = "" , filename = f.FileName;
+                    if(f.FileName.Split('/').Length == 2)
+                    {
+                        componentDirectory = f.FileName.Split('/')[0];
+                        filename = f.FileName.Split('/')[1];
+                    }
+                    Directory.CreateDirectory(Path.Combine(path, componentDirectory));
+                    Files.Add(new Domain.Entities.File { Path = filename });
+                    
                     using (var fileStream = new FileStream(Path.Combine(path, f.FileName), FileMode.Create) )
                     {
                         await f.CopyToAsync(fileStream);

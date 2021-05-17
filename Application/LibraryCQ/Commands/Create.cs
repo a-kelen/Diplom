@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Notifications;
 using Application.ViewModel;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,10 +57,14 @@ namespace Application.LibraryCQ.Commands
 
             public async Task<LibraryDTO> Handle(Command request, CancellationToken cancellationToken)
             {
-                
+                var userId = userAccessor.GetId();
                 Library library = mapper.Map<Command, Library>(request);
+
+                if(await db.Libraries.CountAsync(x => x.Name == library.Name && x.UserId == userId ) > 0)
+                    throw new RestException(HttpStatusCode.BadRequest, new { Library = "Exists" });
+
                 library.Type = Enum.Parse<ElementType>(request.Type);
-                library.UserId = userAccessor.GetId();
+                library.UserId = userId;
                 var res = await db.Libraries.AddAsync(library);
                 await db.SaveChangesAsync();
                 await Mediator.Publish(new HistoryNotification { ElementId = res.Entity.Id, Type = HistoryType.Library, Action = HistoryAction.Created });

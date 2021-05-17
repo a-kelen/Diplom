@@ -45,7 +45,7 @@ namespace API.Controllers
             return File(result, "image/jpeg");
         }
 
-        [HttpGet("topList")]
+        [HttpGet("top-list")]
         public async Task<ActionResult<List<UserDTO>>> Top()
         {
             return await Mediator.Send(new TopList.Query());
