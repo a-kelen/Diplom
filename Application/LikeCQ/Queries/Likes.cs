@@ -47,6 +47,7 @@ namespace Application.LikeCQ.Queries
             {
                 var id = userAccesor.GetId();
                 var res = db.Likes.Where(x => x.UserId == id).ToList();
+                res.Reverse();
                 return mapper.Map <List<Like>, List<LikeDTO>> (res);
             }
         }

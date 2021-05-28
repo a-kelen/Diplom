@@ -43,7 +43,11 @@ namespace Application.LibraryCQ.Queries
 
             public async Task<List<LibraryDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var res = await db.Libraries.Where(x => x.Status == true && x.Name.Contains(request.SearchQuery)).ToListAsync();
+                var res = await db.Libraries
+                    .Include(x => x.Owner)
+                    .Include(x => x.Components)
+                    .Where(x => x.Status == true && x.Name.Contains(request.SearchQuery))
+                    .ToListAsync();
                 return mapper.Map<List<Library>, List<LibraryDTO>>(res);
             }
         }

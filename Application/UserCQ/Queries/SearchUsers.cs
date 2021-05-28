@@ -43,7 +43,12 @@ namespace Application.UserCQ.Queries
 
             public async Task<List<UserDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var res = await db.Users.Where(x => x.UserName.Contains(request.SearchQuery)).ToListAsync();
+                var res = await db.Users
+                    .Include(x => x.Followers)
+                    .Include(x => x.Components)
+                    .Include(x => x.Libraries)
+                    .Where(x => x.UserName.Contains(request.SearchQuery))
+                    .ToListAsync();
                 return mapper.Map<List<User>, List<UserDTO>>(res);
             }
         }

@@ -25,11 +25,20 @@ namespace Application.LikeCQ.Data
         {
             if(source.Descriminator == LikeDescriminator.Library)
             {
-                destination.Library = mapper.Map<Library, LibraryDTO>(db.Libraries.Include(x => x.Components).FirstOrDefault(x => x.Id == source.ElementId));
+                destination.Library = mapper.Map<Library, LibraryDTO>(
+                    db.Libraries.Include(x => x.Components)
+                        .Include(x => x.Owner)
+                        .FirstOrDefault(x => x.Id == source.ElementId)
+                
+                    );
             }
             else
             {
-                destination.Component = mapper.Map<Component, ComponentDTO>(db.Components.FirstOrDefault(x => x.Id == source.ElementId));
+                destination.Component = mapper.Map<Component, ComponentDTO>(
+                    db.Components
+                        .Include(x => x.Owner)
+                        .FirstOrDefault(x => x.Id == source.ElementId)
+                    );
             }
 
         }

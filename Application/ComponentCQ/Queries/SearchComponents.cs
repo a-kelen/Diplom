@@ -47,6 +47,7 @@ namespace Application.ComponentCQ.Queries
             public async Task<List<ComponentDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var res = await db.Components
+                    .Include(x => x.Owner)
                     .Where(x => 
                         x.Status == true && 
                         x.UserId != null &&
