@@ -14,12 +14,15 @@ namespace Persistence
         public DbSet<ComponentReport> ComponentReports { get; set; }
         public DbSet<ComponentBlock> ComponentBlocks { get; set; }
         public DbSet<OwnedComponent> OwnedComponents { get; set; }
+        public DbSet<TopComponent> TopComponents { get; set; }
         public DbSet<LibraryReport> LibraryReports { get; set; }
         public DbSet<OwnedLibrary> OwnedLibraries { get; set; }
         public DbSet<LibraryBlock> LibraryBlocks { get; set; }
+        public DbSet<TopLibrary> TopLibraries { get; set; }
         public DbSet<HistoryItem> HistoryItems { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
         public DbSet<UserBlock> UserBlocks { get; set; }
+        public DbSet<TopUser> TopUsers { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<Follower>  Followers{ get; set; }
         public DbSet<Library> Libraries { get; set; }

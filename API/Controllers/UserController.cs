@@ -98,6 +98,19 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("logout")]
+        public async Task<ActionResult> Logout()
+        {
+            CookieOptions options = new CookieOptions
+            {
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                HttpOnly = true
+            };
+            HttpContext.Response.Cookies.Delete("token", options);
+            return Ok();
+        }
+
         [HttpPost("report")]
         public async Task<ActionResult<bool>> Report(ReportToUser.Command command)
         {

@@ -112,7 +112,7 @@ namespace Persistence
                .WithOne(g => g.Component)
                .HasForeignKey(g => g.ComponentId);
 
-            
+
 
             builder.Entity<Component>().HasMany(t => t.Reports)
                 .WithOne(g => g.Component)
@@ -145,6 +145,11 @@ namespace Persistence
                 .WithOne(g => g.Library)
                 .HasForeignKey<LibraryBlock>(k => k.LibraryId)
                 .OnDelete(DeleteBehavior.Restrict); ;
+        }
+
+        static void topEntities()
+        {
+            
         }
 
     }

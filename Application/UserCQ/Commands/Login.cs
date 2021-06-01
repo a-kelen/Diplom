@@ -50,7 +50,7 @@ namespace Application.UserCQ.Commands
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)
-                    throw new RestException(HttpStatusCode.Unauthorized, null);
+                    throw new RestException(HttpStatusCode.Unauthorized, new { User = "Unauthorized" });
 
                 var result = await _signInManager
                     .CheckPasswordSignInAsync(user, request.Password, false);
@@ -60,7 +60,7 @@ namespace Application.UserCQ.Commands
                     return mapper.Map<User, CurrentUserDTO>(user);
                 }
 
-                throw new RestException(HttpStatusCode.Unauthorized, null);
+                throw new RestException(HttpStatusCode.Unauthorized, new { User = "Unauthorized" });
             }
         }
     }
