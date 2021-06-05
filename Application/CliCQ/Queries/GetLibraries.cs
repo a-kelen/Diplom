@@ -21,15 +21,15 @@ namespace Application.CliCQ.Queries
     {
         public class Query : IRequest<List<LibraryDTO>>
         {
-            public string Type { get; set; }
-            public int Page { get; set; }
+            //public string Type { get; set; }
+            public int Page { get; set; } = 1;
             public bool My { get; set; } = false;
         }
         public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {
-
+                //RuleFor(x => x.Type).NotEmpty();
             }
         }
         public class Handler : IRequestHandler<Query, List<LibraryDTO>>

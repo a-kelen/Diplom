@@ -8,6 +8,7 @@ namespace Domain.Entities
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
+        public User User { get; set; }
         public Guid ElementId { get; set; }
         public LikeDescriminator Descriminator { get; set; }
     }

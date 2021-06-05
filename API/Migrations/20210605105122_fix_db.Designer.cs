@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210605105122_fix_db")]
+    partial class fix_db
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,6 +147,25 @@ namespace API.Migrations
                     b.HasIndex("ComponentId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Domain.Entities.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ComponentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentId");
+
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Domain.Entities.Follower", b =>
@@ -582,15 +603,15 @@ namespace API.Migrations
                         {
                             Id = new Guid("d2429acd-e887-47f8-8ad2-6502e05c9068"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8931e99e-1f7e-45e8-81ec-cfa640a65e99",
-                            Created = new DateTime(2021, 6, 5, 13, 58, 21, 580, DateTimeKind.Local).AddTicks(5368),
+                            ConcurrencyStamp = "bc8dc993-40a2-43d5-b175-3562e7586b18",
+                            Created = new DateTime(2021, 6, 5, 13, 51, 21, 186, DateTimeKind.Local).AddTicks(2835),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Admin",
                             Lastname = "Adminenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIVX7fbSrZN6u7lwE7WBUyffGnEQwrHSvG3Um0azI9+i+qMi2dRPRn0FRoCSwUMXXg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOsBw6pA0YL6Jahkex48gtDreOXOZRRTtrkqKG6nmiiMH+Wh8LhLeDpf8NPpJLLAXQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin"
@@ -599,15 +620,15 @@ namespace API.Migrations
                         {
                             Id = new Guid("d350afff-86b3-449b-be6c-e87394d5a629"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "69cec7a1-4316-4a3a-9639-58bdd7e80528",
-                            Created = new DateTime(2021, 6, 5, 13, 58, 21, 592, DateTimeKind.Local).AddTicks(6097),
+                            ConcurrencyStamp = "a0a96a6a-8f7a-4fb4-8e95-729df3a44e59",
+                            Created = new DateTime(2021, 6, 5, 13, 51, 21, 193, DateTimeKind.Local).AddTicks(8820),
                             Email = "user1@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "User1",
                             Lastname = "Userenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJpWgPn68zAk0HoaBopuFQT1GNVZ7m1EoNvvFnryliZUFxKdHwo7jYVplI5Nux/ftA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDejZ36Br2VIYP95DfSxsRn81CYx7QTKKQQVkiQiimiph43SnSeL8ouDpHnWdMIK8Q==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "user1"
@@ -827,6 +848,17 @@ namespace API.Migrations
                 {
                     b.HasOne("Domain.Entities.Component", "Component")
                         .WithMany("Events")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Component");
+                });
+
+            modelBuilder.Entity("Domain.Entities.File", b =>
+                {
+                    b.HasOne("Domain.Entities.Component", "Component")
+                        .WithMany()
                         .HasForeignKey("ComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

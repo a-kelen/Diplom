@@ -23,7 +23,7 @@ namespace Application.AdminCQ.Commands
         public class Command : IRequest<bool>
         {
             public string UserEmail { get; set; }
-            public string Role { get; set; }
+            public string Role { get; set; } = "moderator";
 
         }
         public class Validator : AbstractValidator<Command>

@@ -9,6 +9,8 @@ namespace Domain.Entities
         public User Owner { get; set; }
         public Guid? UserId { get; set; }
         public string Name { get; set; }
+        public int Likes { get; set; }
+
         public bool Status { get; set; }
         public string File { get; set; }
         public bool Deleted { get; set; }
@@ -18,7 +20,6 @@ namespace Domain.Entities
         public string Description { get; set; }
         public string Dependencies { get; set; }
 
-        public Guid BlockId { get; set; }
         public ComponentBlock Block { get; set; }
 
         public List<Prop> Props { get; set; }

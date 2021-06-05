@@ -12,10 +12,14 @@ namespace Persistence
         public static void Init(ModelBuilder _builder)
         {
             builder = _builder;
-            timeStamps();
+            libraryColumns();
+            componentColumns();
+
             userRelationships();
             componentRelationships();
             libraryRelationships();
+
+            timeStamps();
         }
 
         static void timeStamps()
@@ -92,6 +96,10 @@ namespace Persistence
                .WithOne(g => g.User)
                .HasForeignKey(g => g.UserId);
 
+            builder.Entity<User>().HasMany(t => t.Likes)
+               .WithOne(g => g.User)
+               .HasForeignKey(g => g.UserId);
+
         }
         static void componentRelationships()
         {
@@ -147,10 +155,21 @@ namespace Persistence
                 .OnDelete(DeleteBehavior.Restrict); ;
         }
 
-        static void topEntities()
+        static void libraryColumns()
         {
-            
+            builder.Entity<Library>()
+                .Property(x => x.Likes)
+                .HasDefaultValue(0);
         }
+
+        static void componentColumns()
+        {
+            builder.Entity<Component>()
+                .Property(x => x.Likes)
+                .HasDefaultValue(0);
+        }
+
+ 
 
     }
 }

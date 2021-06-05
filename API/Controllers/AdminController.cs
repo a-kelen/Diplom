@@ -13,21 +13,17 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,moderator")]
     public class AdminController : BaseConttoller
     {
-        [HttpGet("role")]
-        public async Task<ActionResult<string>> GetRole()
-        {
-            return await Mediator.Send(new GetRole.Query());
-        }
-
+        [Authorize(Roles = "admin")]
         [HttpGet("users")]
         public async Task<ActionResult<UsersPageDTO>> GetUsers([FromQuery] AllUsers.Query query)
         {
             return await Mediator.Send(query);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("search-users")]
         public async Task<ActionResult<UsersPageDTO>> SearchUsers([FromQuery] SearchUsers.Query query)
         {
@@ -70,6 +66,7 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
+        // POST
         [HttpPost("admit-report")]
         public async Task<ActionResult<bool>> AdmitReport(AdmitReport.Command command)
         {
@@ -88,6 +85,7 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("switch-block-user")]
         public async Task<ActionResult<TableUserDTO>> SwitchBlockUser(SwitchBlockUser.Command command)
         {

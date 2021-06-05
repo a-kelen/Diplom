@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
@@ -30,13 +31,16 @@ namespace Application.AdminCQ.Queries
             DataContext db;
             iUserAccessor userAccesor;
             IMapper mapper;
+            UserManager<User> userManager;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccesor
-                           , IMapper mapper)
+                           , IMapper mapper
+                           , UserManager<User> userManager)
             {
                 this.db = dataContext;
                 this.userAccesor = userAccesor;
                 this.mapper = mapper;
+                this.userManager = userManager;
             }
 
             public async Task<UsersPageDTO> Handle(Query request, CancellationToken cancellationToken)
@@ -53,6 +57,11 @@ namespace Application.AdminCQ.Queries
                     .Take(request.PageSize)
                     .ToListAsync();
                 res.Users = mapper.Map<List<User>, List<TableUserDTO>>(users); 
+
+                for(int i = 0; i < res.Users.Count; i++)
+                {
+                    res.Users[i].Role = (await userManager.GetRolesAsync(users[i])).FirstOrDefault() ?? "";
+                }
                 return res; 
             }
         }

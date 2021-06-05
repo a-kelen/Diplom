@@ -12,6 +12,8 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace Application.UserCQ.Queries
 {
@@ -26,16 +28,16 @@ namespace Application.UserCQ.Queries
             DataContext db;
             iUserAccessor userAccesor;
             IMapper mapper;
-            private readonly iJWTGenerator _jwtGenerator;
+            UserManager<User> userManager;
             public Handler(DataContext dataContext
                            , iUserAccessor userAccesor
                            , IMapper mapper
-                           , iJWTGenerator jwtGenerator)
+                           , UserManager<User> userManager)
             {
                 this.db = dataContext;
                 this.userAccesor = userAccesor;
                 this.mapper = mapper;
-                this._jwtGenerator = jwtGenerator;
+                this.userManager = userManager;
             }
 
             public async Task<CurrentUserDTO> Handle(Query request, CancellationToken cancellationToken)
@@ -44,7 +46,9 @@ namespace Application.UserCQ.Queries
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                return mapper.Map<User, CurrentUserDTO>(user);
+                var res = mapper.Map<User, CurrentUserDTO>(user);
+                res.Role = (await userManager.GetRolesAsync(user)).FirstOrDefault() ?? "";
+                return res;
             }
         }
     }
