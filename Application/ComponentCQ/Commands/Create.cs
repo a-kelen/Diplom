@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Notifications;
 using Application.ViewModel;
@@ -11,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,7 +60,15 @@ namespace Application.ComponentCQ.Commands
 
             public async Task<ComponentDTO> Handle(Command request, CancellationToken cancellationToken)
             {
+                var userId = userAccessor.GetId();
+                if (db.UserBlocks.Where(x => x.PersonId == userId).Count() > 0)
+                    throw new RestException(HttpStatusCode.BadRequest, new { Component = "Denied" });
+
                 Component component = mapper.Map<Command, Component>(request);
+
+                if (await db.Components.CountAsync(x => x.Name == component.Name && x.UserId == userId) > 0)
+                    throw new RestException(HttpStatusCode.BadRequest, new { Component = "Exists" });
+
                 component.Type = Enum.Parse<ElementType>(request.Type);
                 component.UserId = userAccessor.GetId();
                 var res = await db.Components.AddAsync(component);

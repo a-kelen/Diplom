@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -58,6 +59,8 @@ namespace Application.LibraryCQ.Commands
             public async Task<LibraryDTO> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userId = userAccessor.GetId();
+                if (db.UserBlocks.Where(x => x.PersonId == userId).Count() > 0)
+                    throw new RestException(HttpStatusCode.BadRequest, new { Component = "Denied" });
                 Library library = mapper.Map<Command, Library>(request);
 
                 if(await db.Libraries.CountAsync(x => x.Name == library.Name && x.UserId == userId ) > 0)

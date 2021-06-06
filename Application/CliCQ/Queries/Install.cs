@@ -80,8 +80,12 @@ namespace Application.CliCQ.Queries
                         throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
                     res.Name = library.Name;
                     res.Id = library.Id;
+
                     string startPath = Path.Combine(environment.WebRootPath, "Files", library.Id.ToString());
-                    var files = Directory.GetFiles(startPath).ToList();
+                    var directories = Directory.GetDirectories(startPath).ToList();
+                    List<string> files = new List<string>();
+                    foreach (var d in directories)
+                        files.AddRange(Directory.GetFiles(d).ToList());
                     string[] seps = new string[] { library.Id.ToString() + "\\" };
                     foreach (var f in files)
                         res.Files.Add(f.Split(seps, StringSplitOptions.RemoveEmptyEntries)[1]);

@@ -64,7 +64,10 @@ namespace Application.LibraryCQ.Queries
 
                     var zipName = $"library-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
 
-                    var files = Directory.GetFiles(startPath).ToList();
+                    var directories = Directory.GetDirectories(startPath).ToList();
+                    List<string> files = new List<string>();
+                    foreach (var d in directories)
+                        files.AddRange(Directory.GetFiles(d).ToList());
 
                     var memoryStream = new MemoryStream();
 
