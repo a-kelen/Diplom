@@ -28,6 +28,7 @@ namespace Application.LibraryCQ.Commands
             public string Description { get; set; }
             public string Type { get; set; }
             public bool Status { get; set; }
+            public List<string> Labels { get; set; }
             public List<ComponentVM> Components { get; set; }
 
         }
@@ -63,7 +64,19 @@ namespace Application.LibraryCQ.Commands
                     throw new RestException(HttpStatusCode.BadRequest, new { Component = "Denied" });
                 Library library = mapper.Map<Command, Library>(request);
 
-                if(await db.Libraries.CountAsync(x => x.Name == library.Name && x.UserId == userId ) > 0)
+                List<Label> labels = await db.Labels.Where(x => request.Labels.Contains(x.Name)).ToListAsync();
+                foreach (var l in request.Labels)
+                {
+                    if (labels.Count(x => x.Name == l) > 0)
+                    {
+                        var labelEntity = await db.Labels.AddAsync(new Label { Name = l });
+                        labels.Add(labelEntity.Entity);
+                    }
+                }
+                await db.SaveChangesAsync();
+                library.Labels.AddRange(labels);
+
+                if (await db.Libraries.CountAsync(x => x.Name == library.Name && x.UserId == userId ) > 0)
                     throw new RestException(HttpStatusCode.BadRequest, new { Library = "Exists" });
 
                 library.Type = Enum.Parse<ElementType>(request.Type);

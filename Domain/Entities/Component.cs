@@ -25,6 +25,7 @@ namespace Domain.Entities
         public List<Prop> Props { get; set; }
         public List<Slot> Slots { get; set; }
         public List<Event> Events { get; set; }
+        public List<Label> Labels { get; set; }
         public List<OwnedComponent> Owned { get; set; }
         public List<ComponentReport> Reports { get; set; }
 

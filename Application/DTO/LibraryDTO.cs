@@ -15,5 +15,7 @@ namespace Application.DTO
         public bool HasAvatar { get; set; }
         public DateTime Created { get; set; }
         public int ComponentsCount { get; set; }
+        public List<string> Labels { get; set; }
+
     }
 }

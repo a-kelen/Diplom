@@ -18,6 +18,7 @@ namespace Persistence
             userRelationships();
             componentRelationships();
             libraryRelationships();
+            labelRelationships();
 
             timeStamps();
         }
@@ -130,7 +131,8 @@ namespace Persistence
             builder.Entity<Component>().HasOne(t => t.Block)
                 .WithOne(g => g.Component)
                 .HasForeignKey<ComponentBlock>(k => k.ComponentId)
-                .OnDelete(DeleteBehavior.Restrict); ;
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
         static void libraryRelationships()
         {
@@ -152,7 +154,23 @@ namespace Persistence
             builder.Entity<Library>().HasOne(t => t.Block)
                 .WithOne(g => g.Library)
                 .HasForeignKey<LibraryBlock>(k => k.LibraryId)
-                .OnDelete(DeleteBehavior.Restrict); ;
+                .OnDelete(DeleteBehavior.Restrict);
+
+            
+
+        }
+
+        static void labelRelationships()
+        {
+            builder.Entity<Component>()
+                .HasMany(c => c.Labels)
+                .WithMany(s => s.Components)
+                .UsingEntity(j => j.ToTable("ComponentLabels"));
+
+            builder.Entity<Library>()
+                .HasMany(c => c.Labels)
+                .WithMany(s => s.Libraries)
+                .UsingEntity(j => j.ToTable("LibraryLabels"));
         }
 
         static void libraryColumns()

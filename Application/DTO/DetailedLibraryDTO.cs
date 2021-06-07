@@ -15,6 +15,7 @@ namespace Application.DTO
         public string Status { get; set; }
         public bool HasAvatar { get; set; }
         public string Description { get; set; }
+        public List<string> Labels { get; set; }
         public List<ComponentDTO> Components { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using AutoMapper;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Application.ComponentCQ.Data
@@ -16,6 +17,7 @@ namespace Application.ComponentCQ.Data
                 .ForMember(d => d.Status, o => o.MapFrom(r => r.Status ? "Public" : "Private"))
                 .ForMember(d => d.Author, o => o.MapFrom(r => r.Owner.UserName))
                 .ForMember(d => d.Format, o => o.MapFrom(r => r.Type.ToString()))
+                .ForMember(d => d.Labels, o => o.MapFrom(r => r.Labels.Select(x => x.Name)))
                 .AfterMap<ComponentItemLikeAction>();
 
             CreateMap<Component, DetailedComponentDTO>()
@@ -28,6 +30,7 @@ namespace Application.ComponentCQ.Data
                 .ForMember(d => d.Slots, o => o.MapFrom(r => r.Slots))
                 .ForMember(d => d.Description, o => o.MapFrom(r => r.Description ?? ""))
                 .ForMember(d => d.Dependencies, o => o.MapFrom(r => r.Dependencies ?? ""))
+                .ForMember(d => d.Labels, o => o.MapFrom(r => r.Labels.Select(x => x.Name)))
                 .AfterMap<ComponentLikeAction>();
 
             CreateMap<Commands.Create.Command, Component>();

@@ -62,7 +62,7 @@ namespace Application.CliCQ.Queries
                         .Include(x => x.Owner)
                         .FirstOrDefaultAsync(x => x.Owner.UserName == request.Author && x.Name == request.Name);
                     if (component == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { Component = "Not found" });
+                        throw new RestException(HttpStatusCode.NoContent, new { Component = "Not found" });
                     res.Name = component.Name;
                     res.Id = component.Id;
                     string startPath = Path.Combine(environment.WebRootPath, "Files", component.Id.ToString());
@@ -77,7 +77,7 @@ namespace Application.CliCQ.Queries
                         .Include(x => x.Owner)
                         .FirstOrDefaultAsync(x => x.Owner.UserName == request.Author && x.Name == request.Name);
                     if (library == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
+                        throw new RestException(HttpStatusCode.NoContent, new { Library = "Not found" });
                     res.Name = library.Name;
                     res.Id = library.Id;
 

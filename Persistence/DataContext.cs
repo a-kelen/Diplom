@@ -27,6 +27,7 @@ namespace Persistence
         public DbSet<Follower>  Followers{ get; set; }
         public DbSet<Library> Libraries { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Label> Labels { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Prop> Props { get; set; }
         public DbSet<Slot> Slots { get; set; }

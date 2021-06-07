@@ -17,7 +17,7 @@ namespace Domain.Entities
         public ElementType Type { get; set; }
         public string Description { get; set; }
         public LibraryBlock Block { get; set; }
-
+        public List<Label> Labels { get; set; }
         public List<OwnedLibrary> Owned { get; set; }
         public List<Component> Components { get; set; }
         public List<LibraryReport> Reports { get; set; }

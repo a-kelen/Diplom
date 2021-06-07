@@ -29,6 +29,7 @@ namespace Application.ComponentCQ.Commands
             public string Type { get; set; }
             public string Description { get; set;}
             public string Dependencies { get; set; }
+            public List<string> Labels { get; set; }
             public List<PropVM> Props { get; set; }
             public List<SlotVM> Slots { get; set; }
             public List<EventVM> Events { get; set; }
@@ -65,6 +66,18 @@ namespace Application.ComponentCQ.Commands
                     throw new RestException(HttpStatusCode.BadRequest, new { Component = "Denied" });
 
                 Component component = mapper.Map<Command, Component>(request);
+
+                List<Label> labels = await db.Labels.Where(x => request.Labels.Contains(x.Name)).ToListAsync();
+                foreach(var l in request.Labels)
+                {
+                    if(labels.Count(x => x.Name == l) > 0)
+                    {
+                       var labelEntity = await db.Labels.AddAsync(new Label { Name = l });
+                       labels.Add(labelEntity.Entity);
+                    }
+                }
+                await db.SaveChangesAsync();
+                component.Labels.AddRange(labels);
 
                 if (await db.Components.CountAsync(x => x.Name == component.Name && x.UserId == userId) > 0)
                     throw new RestException(HttpStatusCode.BadRequest, new { Component = "Exists" });

@@ -15,11 +15,13 @@ namespace Application.AdminCQ.Data
             CreateMap<UserReport, UserReportDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => r.Status.ToString()))
                 .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName))
-                .ForMember(d => d.Date, o => o.MapFrom(r => r.User.Created));
+                .ForMember(d => d.Date, o => o.MapFrom(r => r.User.Created.AddDays(2)));
+
             CreateMap<LibraryReport, LibraryReportDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => r.Status.ToString()))
                 .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName))
                 .ForMember(d => d.Date, o => o.MapFrom(r => r.User.Created));
+
             CreateMap<ComponentReport, ComponentReportDTO>()
                 .ForMember(d => d.Status, o => o.MapFrom(r => r.Status.ToString()))
                 .ForMember(d => d.Username, o => o.MapFrom(r => r.User.UserName))
