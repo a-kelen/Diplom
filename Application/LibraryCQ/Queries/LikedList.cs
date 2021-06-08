@@ -50,6 +50,7 @@ namespace Application.LibraryCQ.Queries
                 var ids = db.Likes.Where(x => x.Descriminator == LikeDescriminator.Library && x.UserId == id)
                     .Select(x => x.ElementId);
                 var res = db.Libraries
+                    .Include(x => x.Labels)
                     .Include(x => x.Components)
                     .Where(x => ids.Contains(x.Id))
                     .ToList();

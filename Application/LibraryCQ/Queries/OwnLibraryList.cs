@@ -41,8 +41,10 @@ namespace Application.LibraryCQ.Queries
             public async Task<List<LibraryDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var userId = userAccesor.GetId();
-                var res = db.Libraries.Include(x => x.Owner)
+                var res = db.Libraries
+                    .Include(x => x.Owner)
                     .Include(x => x.Components)
+                    .Include(x => x.Labels)
                     .Where(x => x.UserId == userId)
                     .ToList();
                 return mapper.Map<List<Library>, List<LibraryDTO>>(res);

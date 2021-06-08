@@ -33,7 +33,8 @@ namespace Application.ComponentCQ.Data
                 .ForMember(d => d.Labels, o => o.MapFrom(r => r.Labels.Select(x => x.Name)))
                 .AfterMap<ComponentLikeAction>();
 
-            CreateMap<Commands.Create.Command, Component>();
+            CreateMap<Commands.Create.Command, Component>()
+                .ForMember(x => x.Labels, o => o.Ignore());
 
             CreateMap<PropVM, Prop>();
             CreateMap<EventVM, Event>();

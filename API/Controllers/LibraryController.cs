@@ -31,10 +31,10 @@ namespace API.Controllers
             return await Mediator.Send(new OwnedList.Query());
         }
 
-        [HttpGet("search/{searchQuery}")]
-        public async Task<ActionResult<List<LibraryDTO>>> SearchLibrary(string searchQuery)
+        [HttpGet("search")]
+        public async Task<ActionResult<List<LibraryDTO>>> SearchLibrary([FromQuery] SearchLibraries.Query query)
         {
-            return await Mediator.Send(new SearchLibraries.Query { SearchQuery = searchQuery });
+            return await Mediator.Send(query);
         }
 
         [HttpGet("{id}")]

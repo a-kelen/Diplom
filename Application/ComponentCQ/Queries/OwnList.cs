@@ -42,7 +42,11 @@ namespace Application.ComponentCQ.Queries
             {
                 var userId = userAccesor.GetId();
 
-                var res = db.Components.Where(x => x.UserId == userId).Include(x => x.Owner).ToList();
+                var res = db.Components
+                    .Where(x => x.UserId == userId)
+                    .Include(x => x.Owner)
+                    .Include(x => x.Labels)
+                    .ToList();
                 return  mapper.Map<List<Component>, List<ComponentDTO>>(res);
             }
         }

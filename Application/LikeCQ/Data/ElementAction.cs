@@ -28,6 +28,7 @@ namespace Application.LikeCQ.Data
                 destination.Library = mapper.Map<Library, LibraryDTO>(
                     db.Libraries.Include(x => x.Components)
                         .Include(x => x.Owner)
+                        .Include(x => x.Labels)
                         .FirstOrDefault(x => x.Id == source.ElementId)
                 
                     );
@@ -37,6 +38,7 @@ namespace Application.LikeCQ.Data
                 destination.Component = mapper.Map<Component, ComponentDTO>(
                     db.Components
                         .Include(x => x.Owner)
+                        .Include(x => x.Labels)
                         .FirstOrDefault(x => x.Id == source.ElementId)
                     );
             }

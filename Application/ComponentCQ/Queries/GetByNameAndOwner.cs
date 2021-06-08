@@ -68,6 +68,7 @@ namespace Application.ComponentCQ.Queries
                     .Include(x => x.Events)
                     .Include(x => x.Props)
                     .Include(x => x.Slots)
+                    .Include(x => x.Labels)
                     .FirstOrDefault(x => x.Owner.UserName == request.Owner && x.Name == request.Name);
                 }
 

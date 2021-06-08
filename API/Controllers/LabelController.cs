@@ -14,7 +14,7 @@ namespace API.Controllers
     [Authorize]
     public class LabelController : BaseConttoller
     {
-        [HttpGet("libraries")]
+        [HttpGet("search")]
         public async Task<ActionResult<List<string>>> GetLabels([FromQuery] GetLabels.Query query)
         {
             return await Mediator.Send(query);

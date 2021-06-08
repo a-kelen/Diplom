@@ -162,6 +162,7 @@ namespace Persistence
 
         static void labelRelationships()
         {
+            builder.Entity<Label>().ToTable("Labels");
             builder.Entity<Component>()
                 .HasMany(c => c.Labels)
                 .WithMany(s => s.Components)

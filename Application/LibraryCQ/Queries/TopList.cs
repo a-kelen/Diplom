@@ -49,6 +49,7 @@ namespace Application.LibraryCQ.Queries
                 var res = await db.Libraries
                     .Include(x => x.Components)
                     .Include(x => x.Owner)
+                    .Include(x => x.Labels)
                     .Where(x => ids.Contains(x.Id) && x.Status == true)
                     .ToListAsync();
 

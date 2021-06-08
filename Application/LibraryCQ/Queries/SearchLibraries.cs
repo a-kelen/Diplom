@@ -21,13 +21,13 @@ namespace Application.LibraryCQ.Queries
     {
         public class Query : IRequest<List<LibraryDTO>>
         {
-            public string SearchQuery { get; set; }
+            public string SearchQuery { get; set; } = "";
+            public List<string> Labels { get; set; }
         }
         public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {
-                RuleFor(x => x.SearchQuery).NotEmpty();
             }
         }
         public class Handler : IRequestHandler<Query, List<LibraryDTO>>
@@ -43,11 +43,26 @@ namespace Application.LibraryCQ.Queries
 
             public async Task<List<LibraryDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var res = await db.Libraries
+                var q = db.Libraries
                     .Include(x => x.Owner)
                     .Include(x => x.Components)
-                    .Where(x => x.Status == true && x.Name.Contains(request.SearchQuery))
-                    .ToListAsync();
+                    .Include(x => x.Labels)
+                    .Where(x => x.Status == true);
+
+                if (request.SearchQuery != null)
+                {
+                    q = q.Where(x => x.Name.Contains(request.SearchQuery));
+                }
+
+                List<Library> res = new List<Library>();
+                if (request.Labels != null)
+                {
+                    q = q.Where(x => x.Labels.Any(t => request.Labels.Contains(t.Name)));
+                    res = await q.ToListAsync();
+                }
+                else if (request.SearchQuery == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Search = "Invalid" });
+
                 return mapper.Map<List<Library>, List<LibraryDTO>>(res);
             }
         }

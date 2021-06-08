@@ -21,13 +21,13 @@ namespace Application.LabelCQ
     {
         public class Query : IRequest<List<string>>
         {
-            public string QueryString { get; set; }
+            public string SearchQuery { get; set; }
         }
         public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {
-                RuleFor(x => x.QueryString).NotEmpty();
+                RuleFor(x => x.SearchQuery).NotEmpty();
             }
         }
         public class Handler : IRequestHandler<Query, List<string>>
@@ -48,7 +48,7 @@ namespace Application.LabelCQ
             {
 
                 return await db.Labels
-                    .Where(x => x.Name.Contains(request.QueryString))
+                    .Where(x => x.Name.Contains(request.SearchQuery))
                     .Select(x => x.Name)
                     .ToListAsync();
             }

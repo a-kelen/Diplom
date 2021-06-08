@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,7 @@ namespace Application.ComponentCQ.Queries
                 var ids = db.Likes.Where(x => x.Descriminator == LikeDescriminator.Component && x.UserId == id)
                     .Select(x => x.ElementId);
                 var res = db.Components
+                    .Include(x => x.Labels)
                     .Where(x => ids.Contains(x.Id))
                     .ToList();
 

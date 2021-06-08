@@ -42,8 +42,8 @@ namespace Application.ComponentCQ.Queries
                 var id = userAccesor.GetId();
                 var res = db.OwnedComponents
                     .Where(x => x.UserId == id)
-                    .Include(x => x.Component)
-                    .ThenInclude(x => x.Owner)
+                    .Include(x => x.Component).ThenInclude(x => x.Owner)
+                    .Include(x => x.Component).ThenInclude(x => x.Labels)
                     .Select(x => x.Component).ToList();
                 
                 return mapper.Map <List<Component>, List<ComponentDTO>> (res);

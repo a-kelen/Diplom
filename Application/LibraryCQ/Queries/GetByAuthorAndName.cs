@@ -52,6 +52,7 @@ namespace Application.LibraryCQ.Queries
                 var library = db.Libraries
                     .Include(x => x.Components)
                     .Include(x => x.Owner)
+                    .Include(x => x.Labels)
                     .FirstOrDefault(x => x.Name == request.Name && x.Owner.UserName == request.Author);
 
                 if (library == null)

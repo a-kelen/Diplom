@@ -67,13 +67,14 @@ namespace Application.LibraryCQ.Commands
                 List<Label> labels = await db.Labels.Where(x => request.Labels.Contains(x.Name)).ToListAsync();
                 foreach (var l in request.Labels)
                 {
-                    if (labels.Count(x => x.Name == l) > 0)
+                    if (labels.Count(x => x.Name == l) == 0)
                     {
                         var labelEntity = await db.Labels.AddAsync(new Label { Name = l });
                         labels.Add(labelEntity.Entity);
                     }
                 }
                 await db.SaveChangesAsync();
+                library.Labels = new List<Label>();
                 library.Labels.AddRange(labels);
 
                 if (await db.Libraries.CountAsync(x => x.Name == library.Name && x.UserId == userId ) > 0)

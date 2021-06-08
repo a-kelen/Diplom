@@ -39,10 +39,10 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
-        [HttpGet("search/{searchQuery}")]
-        public async Task<ActionResult<List<ComponentDTO>>> SearchComponent(string searchQuery)
+        [HttpGet("search")]
+        public async Task<ActionResult<List<ComponentDTO>>> SearchComponent([FromQuery] SearchComponents.Query query)
         {
-            return await Mediator.Send(new SearchComponents.Query { SearchQuery = searchQuery });
+            return await Mediator.Send(query);
         }
 
         [HttpGet("liked")]

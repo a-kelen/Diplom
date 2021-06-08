@@ -21,13 +21,14 @@ namespace Application.ComponentCQ.Queries
     {
         public class Query : IRequest<List<ComponentDTO>>
         {
-            public string SearchQuery { get; set; }
+            public string SearchQuery { get; set; } = "";
+            public List<string> Labels { get; set; }
         }
         public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {
-                RuleFor(x => x.SearchQuery).NotEmpty();
+
             }
         }
         public class Handler : IRequestHandler<Query, List<ComponentDTO>>
@@ -46,13 +47,28 @@ namespace Application.ComponentCQ.Queries
 
             public async Task<List<ComponentDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var res = await db.Components
+
+                var q = db.Components
                     .Include(x => x.Owner)
+                    .Include(x => x.Labels)
                     .Where(x => 
                         x.Status == true && 
-                        x.UserId != null &&
-                        x.Name.Contains(request.SearchQuery)
-                    ).ToListAsync();
+                        x.UserId != null
+                    );
+                if(request.SearchQuery != null) {
+                    q = q.Where(x => x.Name.Contains(request.SearchQuery));
+                }
+
+                List<Component> res = new List<Component>();
+                if (request.Labels != null)
+                {
+                    q = q.Where(x => x.Labels.Any(t => request.Labels.Contains(t.Name)));
+                    res = await q.ToListAsync();
+                }
+                else if (request.SearchQuery == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Search = "Invalid" });
+
+
                 return mapper.Map <List<Component>, List<ComponentDTO>> (res);
             }
         }
