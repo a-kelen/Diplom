@@ -35,6 +35,7 @@ namespace Persistence
 
         public DataContext(DbContextOptions options) : base(options)
         {
+            Database.EnsureCreated();
             if(false)
             {
                 Database.EnsureDeleted();

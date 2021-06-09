@@ -88,3 +88,5 @@ C:\Users\kalan\source\repos\Diplom\API\bin\Debug\netcoreapp3.1\FluentValidation.
 C:\Users\kalan\source\repos\Diplom\API\bin\Debug\netcoreapp3.1\MediatR.Extensions.FluentValidation.AspNetCore.dll
 C:\Users\kalan\source\repos\Diplom\API\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Users\kalan\source\repos\Diplom\API\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\kalan\source\repos\Diplom\API\bin\Debug\netcoreapp3.1\Npgsql.dll
+C:\Users\kalan\source\repos\Diplom\API\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll
