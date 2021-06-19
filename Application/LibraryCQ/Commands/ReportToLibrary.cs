@@ -47,17 +47,15 @@ namespace Application.LibraryCQ.Commands
                 Library library = await db.Libraries.FirstOrDefaultAsync(x => x.Id == request.Id);
                 if (library == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Library = "Not found" });
-
-                for(int i = 0; i < 10; i++)
+               
+                LibraryReport report = new LibraryReport
                 {
-                    LibraryReport report = new LibraryReport
-                    {
-                        UserId = userId,
-                        LibraryId = library.Id,
-                        Content = request.Content
-                    };
-                    await db.LibraryReports.AddAsync(report);
-                }
+                    UserId = userId,
+                    LibraryId = library.Id,
+                    Content = request.Content
+                };
+                await db.LibraryReports.AddAsync(report);
+                
                 return await db.SaveChangesAsync() > 0;
             }
         }

@@ -88,3 +88,5 @@ C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\API.csproj.Copy
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\API.dll
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\API.pdb
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\API.genruntimeconfig.cache
+C:\Users\kalan\source\repos\Diplom\API\bin\Release\netcoreapp3.1\Npgsql.dll
+C:\Users\kalan\source\repos\Diplom\API\bin\Release\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll

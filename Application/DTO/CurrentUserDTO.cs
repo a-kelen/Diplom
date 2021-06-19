@@ -11,6 +11,7 @@ namespace Application.DTO
         public string Role { get; set; }
         public string Lastname { get; set; }
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
         public bool HasAvatar { get; set; }
         public string Email { get; set; }
         public string Image { get; set; }

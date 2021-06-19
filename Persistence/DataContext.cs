@@ -54,24 +54,5 @@ namespace Persistence
             //Seeding
             Seed.Init(builder);
         }
-        //public override int SaveChanges()
-        //{
-        //    var entries = ChangeTracker
-        //        .Entries()
-        //        .Where(e => e.Entity is BaseTimeEntity && (
-        //                e.State == EntityState.Added
-        //                || e.State == EntityState.Modified));
-
-        //    foreach (var entityEntry in entries)
-        //    {
-
-        //        if (entityEntry.State == EntityState.Added)
-        //        {
-        //            ((BaseTimeEntity)entityEntry.Entity).Created = DateTime.Now;
-        //        }
-        //    }
-
-        //    return base.SaveChanges();
-        //}
     }
 }

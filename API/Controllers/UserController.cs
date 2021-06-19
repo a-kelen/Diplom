@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DTO;
+using Application.Interfaces;
 using Application.UserCQ.Commands;
 using Application.UserCQ.Queries;
 using Domain.Entities;
@@ -75,13 +76,15 @@ namespace API.Controllers
         public async Task<ActionResult<CurrentUserDTO>> Login(Login.Command query)
         {
             var res = await Mediator.Send(query);
-            CookieOptions options = new CookieOptions { 
+            CookieOptions options= new CookieOptions
+            {
                 Expires = DateTime.Now.AddDays(5),
                 SameSite = SameSiteMode.None,
                 Secure = true,
                 HttpOnly = true
             };
             HttpContext.Response.Cookies.Append("token", res.Token, options);
+            HttpContext.Response.Cookies.Append("refreshToken", res.RefreshToken, options);
             return res;
         }
 
@@ -89,7 +92,18 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<CurrentUserDTO>> Register(Register.Command command)
         {
-            return await Mediator.Send(command);
+            var res = await Mediator.Send(command);
+            CookieOptions options = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(5),
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                HttpOnly = true
+            };
+            
+            HttpContext.Response.Cookies.Append("token", res.Token, options);
+            HttpContext.Response.Cookies.Append("refreshToken", res.RefreshToken, options);
+            return res;
         }
 
         [HttpPost("follow")]
@@ -108,6 +122,7 @@ namespace API.Controllers
                 HttpOnly = true
             };
             HttpContext.Response.Cookies.Delete("token", options);
+            HttpContext.Response.Cookies.Delete("refreshToken", options);
             return Ok();
         }
 
@@ -123,16 +138,43 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpPut("avatar")]
+        [HttpPost("avatar")]
         public async Task<ActionResult<bool>> UpdateAvatar([FromForm]UpdateAvatar.Command command)
         {
             return await Mediator.Send(command);
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult<UserDTO>> EditProfile(EditProfile.Command command)
         {
             return await Mediator.Send(command);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<CurrentUserDTO>> RefreshToken()
+        {
+            string refreshToken = HttpContext.Request.Cookies["refreshToken"];
+            string accessToken = HttpContext.Request.Cookies["token"];
+            var res = await Mediator.Send(new RefreshToken.Command { RefreshToken = refreshToken, AccessToken = accessToken });
+
+            CookieOptions options = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(5),
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                HttpOnly = true
+            };
+
+            HttpContext.Response.Cookies.Append("token", res.Token, options);
+            HttpContext.Response.Cookies.Append("refreshToken", res.RefreshToken, options);
+            return res;
+        }
+
+        [HttpPost("revoke-token")]
+        public async Task<ActionResult<bool>> RevokeToken()
+        {
+            return await Mediator.Send(new RevokeToken.Command());
         }
 
 

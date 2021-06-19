@@ -13,6 +13,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Persistence;
+using System.Linq;
 
 namespace Application.UserCQ.Commands
 {
@@ -38,11 +40,15 @@ namespace Application.UserCQ.Commands
             private readonly UserManager<User> _userManager;
             private readonly SignInManager<User> _signInManager;
             private readonly IMapper mapper;
-            public Handler(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
+            iJWTGenerator jWTGenerator;
+            DataContext db;
+            public Handler(DataContext db, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, iJWTGenerator _iJWTGenerator)
             {
                 this.mapper = mapper;
                 this._signInManager = signInManager;
                 this._userManager = userManager;
+                this.jWTGenerator = _iJWTGenerator;
+                this.db = db;
             }
 
             public async Task<CurrentUserDTO> Handle(Command request, CancellationToken cancellationToken)
@@ -57,7 +63,12 @@ namespace Application.UserCQ.Commands
 
                 if (result.Succeeded)
                 {
-                    return mapper.Map<User, CurrentUserDTO>(user);
+                    user.RefreshToken = jWTGenerator.GenerateRefreshToken();
+                    user.RefreshTokenExpiryTime = DateTime.Now.AddDays(5);
+                    await db.SaveChangesAsync();
+                    var res = mapper.Map<User, CurrentUserDTO>(user);
+                    res.Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? "";
+                    return res;
                 }
 
                 throw new RestException(HttpStatusCode.Unauthorized, new { User = "Unauthorized" });

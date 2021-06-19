@@ -24,6 +24,7 @@ namespace Application.UserCQ.Data
         public void Process(User source, CurrentUserDTO destination, ResolutionContext context)
         {
             destination.Token = jwtGenerator.CreateToken(source);
+            destination.RefreshToken = source.RefreshToken;
         }
     }
 }

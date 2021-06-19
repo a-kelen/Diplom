@@ -25,6 +25,7 @@ C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwr
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Files\2c45738c-2358-4112-9619-08d91384dc3b\product-details.component.css
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Files\2c45738c-2358-4112-9619-08d91384dc3b\product-details.component.html
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Files\2c45738c-2358-4112-9619-08d91384dc3b\product-details.component.ts
+C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Files\4eb817d3-c065-45f4-7ce6-08d92be43df1\1_P7x-_0XfQz6CVmMY_QAv0w.png
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Files\59e9a2aa-78ce-41de-9862-08d9137ecc28\Form.js
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Files\59e9a2aa-78ce-41de-9862-08d9137ecc28\Gallery.js
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Files\613b2754-1e5a-4da4-286b-08d92996744d\asdasd\images.png
@@ -84,6 +85,8 @@ C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Micr
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Newtonsoft.Json.dll
+C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Npgsql.dll
+C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\kalan\source\repos\Diplom\API\obj\Release\netcoreapp3.1\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll

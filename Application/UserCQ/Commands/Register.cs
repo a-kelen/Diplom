@@ -47,11 +47,13 @@ namespace Application.UserCQ.Commands
             private readonly DataContext _context;
             private readonly UserManager<User> _userManager;
             private readonly IMapper mapper;
-            public Handler(DataContext context, UserManager<User> userManager, IMapper mapper)
+            iJWTGenerator jWTGenerator;
+            public Handler(DataContext context, UserManager<User> userManager, IMapper mapper, iJWTGenerator _iJWTGenerator)
             {
                 this.mapper = mapper;
                 this._userManager = userManager;
                 this._context = context;
+                this.jWTGenerator = _iJWTGenerator;
             }
 
             public async Task<CurrentUserDTO> Handle(Command request, CancellationToken cancellationToken)
@@ -74,6 +76,9 @@ namespace Application.UserCQ.Commands
 
                 if (result.Succeeded)
                 {
+                    user.RefreshToken = jWTGenerator.GenerateRefreshToken();
+                    user.RefreshTokenExpiryTime = DateTime.Now.AddDays(5);
+                    await _context.SaveChangesAsync();
                     return mapper.Map<User, CurrentUserDTO>(user);
                 }
 

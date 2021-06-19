@@ -97,7 +97,7 @@ namespace API.Controllers
         }
 
         // PUT
-        [HttpPut]
+        [HttpPost("update")]
         public async Task<ActionResult<ComponentDTO>> UpdateComponent(Edit.Command command)
         {
             return await Mediator.Send(command);

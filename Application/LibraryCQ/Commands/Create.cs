@@ -61,7 +61,7 @@ namespace Application.LibraryCQ.Commands
             {
                 var userId = userAccessor.GetId();
                 if (db.UserBlocks.Where(x => x.PersonId == userId).Count() > 0)
-                    throw new RestException(HttpStatusCode.BadRequest, new { Component = "Denied" });
+                    throw new RestException(HttpStatusCode.BadRequest, new { Library = "Denied" });
                 Library library = mapper.Map<Command, Library>(request);
 
                 List<Label> labels = await db.Labels.Where(x => request.Labels.Contains(x.Name)).ToListAsync();

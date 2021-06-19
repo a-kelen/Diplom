@@ -28,7 +28,8 @@ namespace Application.LibraryCQ.Data
                 .ForMember(d => d.Labels, o => o.MapFrom(r => r.Labels.Select(x => x.Name)))
                 .AfterMap<LibraryLikeAction>();
 
-            CreateMap<Commands.Create.Command, Library>();
+            CreateMap<Commands.Create.Command, Library>()
+                .ForMember(x => x.Labels, o => o.Ignore());
             
             CreateMap<ComponentVM, Component>();
 

@@ -14,6 +14,8 @@ namespace Domain.Entities
         public string Firstname { get; set;}
         public DateTime Created { get; set; }
         public UserBlock Block { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
 
         public List<Like> Likes { get; set; }
         public List<Follower> Follows { get; set; }

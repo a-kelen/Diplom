@@ -92,7 +92,7 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpPut("set-role")]
+        [HttpPost("set-role")]
         public async Task<ActionResult<bool>> SetRoleForUser(ChangeRole.Command command)
         {
             return await Mediator.Send(command);

@@ -100,7 +100,6 @@ namespace Persistence
             builder.Entity<User>().HasMany(t => t.Likes)
                .WithOne(g => g.User)
                .HasForeignKey(g => g.UserId);
-
         }
         static void componentRelationships()
         {
@@ -121,8 +120,6 @@ namespace Persistence
                .WithOne(g => g.Component)
                .HasForeignKey(g => g.ComponentId);
 
-
-
             builder.Entity<Component>().HasMany(t => t.Reports)
                 .WithOne(g => g.Component)
                 .HasForeignKey(g => g.ComponentId)
@@ -132,7 +129,6 @@ namespace Persistence
                 .WithOne(g => g.Component)
                 .HasForeignKey<ComponentBlock>(k => k.ComponentId)
                 .OnDelete(DeleteBehavior.Restrict);
-
         }
         static void libraryRelationships()
         {
@@ -155,9 +151,6 @@ namespace Persistence
                 .WithOne(g => g.Library)
                 .HasForeignKey<LibraryBlock>(k => k.LibraryId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            
-
         }
 
         static void labelRelationships()
@@ -187,8 +180,5 @@ namespace Persistence
                 .Property(x => x.Likes)
                 .HasDefaultValue(0);
         }
-
- 
-
     }
 }

@@ -584,6 +584,12 @@ namespace API.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -611,16 +617,17 @@ namespace API.Migrations
                         {
                             Id = new Guid("d2429acd-e887-47f8-8ad2-6502e05c9068"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "77604de6-d05a-41fb-98dc-7801c58b5b8d",
-                            Created = new DateTime(2021, 6, 7, 23, 25, 41, 815, DateTimeKind.Local).AddTicks(678),
+                            ConcurrencyStamp = "a619c99a-5248-468f-98ed-e97219fc1794",
+                            Created = new DateTime(2021, 6, 9, 23, 32, 49, 116, DateTimeKind.Local).AddTicks(6345),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Admin",
                             Lastname = "Adminenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECly6Pob0jk+j66fTQf9zzfO7d2Klpf1qfeAVw9kLzWxWm9AiVQink1C63bJlqXOgw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMgvePh1vlUB+TEmQcBzkv5xZfqYIc80/qx4in5afnZdYFLjDbHwyYSzSIx/ENqpfw==",
                             PhoneNumberConfirmed = false,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
@@ -628,16 +635,17 @@ namespace API.Migrations
                         {
                             Id = new Guid("d350afff-86b3-449b-be6c-e87394d5a629"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c5dfae14-9b5a-4b99-bcb7-e1082c1cc049",
-                            Created = new DateTime(2021, 6, 7, 23, 25, 41, 818, DateTimeKind.Local).AddTicks(931),
+                            ConcurrencyStamp = "976e4e4c-fe98-4a9f-a740-adfafa66c618",
+                            Created = new DateTime(2021, 6, 9, 23, 32, 49, 119, DateTimeKind.Local).AddTicks(9506),
                             Email = "user1@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "User1",
                             Lastname = "Userenko",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJFFEo/x1q0PriZqq1dP4pHWrO88EQJDhHuZ0/XZ37V4mL5uhs1LBkvBQJb8pNmF2Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOkZzKh0E/jJqmZGqd4MT/84YgQOhDh3FkrnUqPu7l1BOY4xnkhtT9iGki07cPu87w==",
                             PhoneNumberConfirmed = false,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TwoFactorEnabled = false,
                             UserName = "user1"
                         });

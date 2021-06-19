@@ -51,7 +51,7 @@ namespace API
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.WithOrigins("http://localhost:8080")
+                    policy.WithOrigins(Configuration["client"])
                           .AllowCredentials()
                           .AllowAnyHeader()
                           .AllowAnyMethod()
@@ -65,7 +65,7 @@ namespace API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"),
+                    Configuration.GetConnectionString("LocalConnection"),
                     s => {
                         s.MigrationsAssembly("API");
                         s.EnableRetryOnFailure(
@@ -73,7 +73,6 @@ namespace API
                            maxRetryDelay: TimeSpan.FromSeconds(30),
                            errorNumbersToAdd: null);
                     });
-
             });
 
             var builder = services.AddIdentityCore<User>();

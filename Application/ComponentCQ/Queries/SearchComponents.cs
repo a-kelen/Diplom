@@ -24,13 +24,7 @@ namespace Application.ComponentCQ.Queries
             public string SearchQuery { get; set; } = "";
             public List<string> Labels { get; set; }
         }
-        public class Validator : AbstractValidator<Query>
-        {
-            public Validator()
-            {
-
-            }
-        }
+        
         public class Handler : IRequestHandler<Query, List<ComponentDTO>>
         {
             DataContext db;
@@ -63,12 +57,12 @@ namespace Application.ComponentCQ.Queries
                 if (request.Labels != null)
                 {
                     q = q.Where(x => x.Labels.Any(t => request.Labels.Contains(t.Name)));
-                    res = await q.ToListAsync();
+                    
                 }
                 else if (request.SearchQuery == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Search = "Invalid" });
 
-
+                res = await q.ToListAsync();
                 return mapper.Map <List<Component>, List<ComponentDTO>> (res);
             }
         }

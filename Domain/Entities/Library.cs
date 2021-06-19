@@ -7,9 +7,9 @@ namespace Domain.Entities
     public class Library : BaseTimeEntity
     {
         public User Owner { get; set; }
+        public int Likes { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
-        public int Likes { get; set; }
         public bool Status { get; set; }
         public string File { get; set; }
         public bool Deleted { get; set; }

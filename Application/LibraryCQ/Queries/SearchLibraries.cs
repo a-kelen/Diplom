@@ -58,11 +58,11 @@ namespace Application.LibraryCQ.Queries
                 if (request.Labels != null)
                 {
                     q = q.Where(x => x.Labels.Any(t => request.Labels.Contains(t.Name)));
-                    res = await q.ToListAsync();
+                    
                 }
                 else if (request.SearchQuery == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Search = "Invalid" });
-
+                res = await q.ToListAsync();
                 return mapper.Map<List<Library>, List<LibraryDTO>>(res);
             }
         }

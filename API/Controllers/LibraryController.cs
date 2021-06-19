@@ -107,13 +107,13 @@ namespace API.Controllers
 
 
         // PUT
-        [HttpPut]
+        [HttpPost("update")]
         public async Task<ActionResult<LibraryDTO>> UpdateLibrary(Edit.Command command)
         {
             return await Mediator.Send(command);
         }
 
-        [HttpPut("avatar")]
+        [HttpPost("avatar")]
         public async Task<ActionResult<bool>> UpdateAvatar([FromForm]UpdateLibraryAvatar.Command command)
         {
             return await Mediator.Send(command);
